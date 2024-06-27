@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylometric Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <p><span class="verifyme-text"><b>VerifyMe</b></span> - Stylometric Embedding</p>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <!-- Add more navigation links as needed -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="center-div">
+        <h2>Enter Text for Analysis</h2>
+        <form id="analysisForm" method="post">
+            <input type="text" name="mytext" required>
+            <input type="submit" value="Analyze">
+        </form>
+
+    <div class="ndiv">
+        <h2>Stylometric Embedding</h2>
+        <div id="result-p">Embedding will appear here...</div>
+        <span></span><br/><span></span>
+        <input type="submit" value="Clear" onclick="clearFormAndResult()">
+        <br/>
+        <!-- Add a new form for CSV file path and authorID -->
+
+        </div><br/>
+        <div class="ndiv">
+            <div class="ndiv">
+                <h2>Select an Existing CSV to Append</h2>
+                <select id="existingCsvFiles">
+                    <option value="">Select a CSV File</option>
+                    <!-- Options will be added here by JavaScript -->
+                </select>
+                <br/>
+            </div>
+            <h2>Upload CSV & Save Embedding</h2>
+            <form id="uploadForm" method="post" enctype="multipart/form-data">
+                <input type="file" name="csvFile" required>
+                <input type="button" value="Upload CSV" onclick="uploadCsv()">
+                <br/><br/>            
+                <select id="existingAuthorIds">
+                    <option value="">Select an Author ID</option>
+                </select>
+                <input type="text" id="newAuthorId" placeholder="Enter new Author ID" style="width: 50%;">
+                <br/>
+                <input type="button" value="Save Embedding" onclick="saveEmbedding()">
+            </form>
+            <div id="selectedCsv"></div> <!-- Display the selected CSV file -->
+        </div>
+        <div id="saveResult"></div>
+    </div>
+
+    <script>
+    
+    let selectedCsvFile = '';
+
+    function listCsvFiles() {
+    fetch('/list_csv_files')
+    .then(response => response.json())
+    .then(files => {
+        const fileList = document.getElementById('existingCsvFiles'); // Assume this is an existing <select> element
+        files.forEach(file => {
+            let option = new Option(file, file);
+            fileList.appendChild(option);
+        });
+    });
+}
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Prepopulate the dropdown with author IDs when the page loads
+        fetchAuthorIds();
+        listCsvFiles();
+
+        // Add event listener to handle text analysis form submission
+        document.getElementById('analysisForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+            const formData = new FormData(this);
+            const searchParams = new URLSearchParams();
+            for (const pair of formData) {
+                searchParams.append(pair[0], pair[1]);
+            }
+            document.getElementById('result-p').innerHTML = 'Generating embedding, please wait...';
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: searchParams,
+            })
+            .then(response => response.text()) // Assuming the response is text; adjust if JSON
+            .then(text => {
+                document.getElementById('result-p').innerHTML = text;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result-p').innerHTML = 'An error occurred.';
+            });
+        });
+        // Add event listener to handle CSV file upload form submission
+        // Note: Removed duplicate event listener and consolidated the logic within uploadCsv function
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            uploadCsv();
+        });
+
+        // Fetch and display available CSV files
+        fetch('/list_csv_files')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('existingCsvFiles');
+                data.forEach(filename => {
+                    const option = new Option(filename, filename);
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching CSV files:', error));
+            
+    });
+
+
+
+
+    function uploadCsv() {
+        const formData = new FormData(document.getElementById('uploadForm'));
+        fetch('/upload_csv', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.filename) {
+                console.log('Success:', data);
+                selectedCsvFile = data.filename; // Save the uploaded file's name
+                document.getElementById('selectedCsv').textContent = `Selected CSV: ${selectedCsvFile}`; // Display the selected file
+                fetchAuthorIds(); // Fetch author IDs for this file
+            } else {
+                console.error('Error:', data.error);
+            }
+        });
+    }
+
+
+    // Modifications for saveEmbedding to use selectedCsvFile variable
+    function saveEmbedding() {
+        const selectedCsvFile = document.getElementById('existingCsvFiles').value;
+        if (!selectedCsvFile) {
+            console.error('No CSV file selected.');
+            return;
+        }
+            
+        if (!csvFile) {
+            console.error('No CSV file selected.');
+            return;
+        }
+
+        const newAuthorId = document.getElementById('newAuthorId').value;
+        const existingAuthorId = document.getElementById('existingAuthorIds').value;
+        const authorId = newAuthorId ? newAuthorId : existingAuthorId;
+        const embedding = document.getElementById('result-p').textContent;
+
+        fetch('/save_embedding', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({csvFile: selectedCsvFile, embedding, authorId}), // Use selectedCsvFile here
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('saveResult').textContent = data.message;
+        });
+    }
+
+
+    // Function fetchAuthorIds remains largely the same, but ensure it works with the newly uploaded file
+    function fetchAuthorIds() {
+        if (!selectedCsvFile) {
+            console.error('No CSV file selected.');
+            return;
+        }
+        // Adjust this fetch request according to how your backend expects to receive the filename/path
+        fetch('/get_author_ids', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({csvFile: selectedCsvFile}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('existingAuthorIds');
+            select.innerHTML = '<option value="">Select an Author ID</option>'; // Reset dropdown
+            data.forEach(authorId => {
+                const option = new Option(authorId, authorId);
+                select.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error('Fetch author IDs failed:', error);
+        });
+    }
+
+
+    // Ensure clearFormAndResult function clears the newAuthorId field and the selectedCsv display
+    function clearFormAndResult() {
+        document.querySelector('input[name="mytext"]').value = '';
+        document.getElementById('result-p').innerHTML = 'Embedding will appear here...';
+        document.getElementById('newAuthorId').value = '';
+        document.getElementById('selectedCsv').textContent = ''; // Clear selected CSV display
+        selectedCsvFile = ''; // Reset the stored filename/path
+    }
+    </script>
+
+</body>
+</html>

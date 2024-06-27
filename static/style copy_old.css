@@ -1,0 +1,813 @@
+:root {
+  --light-cyan: #d6fff6;
+  --medium-turquoise: #4dccbd;
+  --russian-violet: #110d31;
+  --french-blue: #2374ab;
+  --light-coral: #ff8484;
+  --size: 80px;
+  --animation-duration: 2s;
+}
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #212121;
+  /*    background-image: url('OAI.jpg');*/
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center;
+
+  align-items: center;
+  color: #333;
+}
+
+select {
+  font-family: "Inter", sans-serif; /* Ensures dropdown matches page font */
+  font-size: 16px; /* Adjust as needed */
+  padding: 8px; /* Adjust as needed */
+  border-radius: 4px; /* Optional: Rounds the corners of the dropdown */
+  border: 1px solid #ddd; /* Optional: Adds a light border to the dropdown */
+}
+
+.center-div {
+  width: 850px; /* Adjust the width as needed */
+  max-width: 100%; /* Ensures responsiveness */
+  margin: 0 auto; /* Centers the div horizontally */
+  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+.center-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.center2-div {
+  width: 800px; /* Adjust the width as needed */
+  max-width: 90%; /* Ensures responsiveness */
+  margin: 0 auto; /* Centers the div horizontally */
+  max-height: 1000px; /* Maximum height before becoming scrollable */
+  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+.pre2 {
+  unicode-bidi: embed;
+  /* font-family: monospace;   */
+  white-space: pre;
+  font-size: 15px;
+
+  font-family: "Inter", sans-serif;
+}
+
+pre {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+}
+.slim-div {
+  width: 900px; /* Adjust the width as needed */
+  max-width: 100%; /* Ensures responsiveness */
+  height: auto;
+  z-index: 9000; /* Ensure it stays on top of other content */
+  display: flex; /* Using flexbox for layout */
+
+  margin: 0 auto; /* Centers the div horizontally */
+  max-height: 750px; /* Maximum height before becoming scrollable */
+  /*  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  align-items: center;
+}
+
+input[type="textin"] {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  width: calc(100% - 24px);
+  margin-bottom: 16px;
+  resize: both;
+  max-height: 20%;
+  font-family: "Inter", sans-serif;
+}
+input[type="text"] {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  width: calc(100% - 24px);
+  margin-bottom: 16px;
+  font-family: "Inter", sans-serif;
+}
+
+textarea {
+  width: 100%; /* Adjust as needed */
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 17px; /* Adjust as needed */
+  font-family: "Inter", sans-serif;
+
+  border: 1px solid #ccc; /* Style as per your input field */
+  border-radius: 4px; /* Style as per your input field */
+  resize: vertical; /* Allow vertical resizing only */
+  max-height: 300px; /* Set your desired maximum height here */
+}
+
+input[type="submit"] {
+  background-color: #007bff; /*#007BFF */
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 15px;
+}
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+input[type="submit2"] {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 8px 25px;
+  width: auto;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 15px;
+  display: block; /* Make the input display as block */
+  margin: 0 auto; /* Auto margin on both sides to center */
+  text-align: center; /* Center text inside the button */
+}
+
+input[type="submit2"]:hover {
+  background-color: #b30000;
+  border: none;
+}
+
+
+
+#submit3 {
+  cursor: pointer;
+  padding: 8px 10px; /* Consistent padding */
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 50px;
+  background-color: transparent; /* Transparent background initially */
+  font-size: 14px; /* Uniform font size */
+  color: #007bff;
+  margin-bottom: 10px;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+}
+
+#submit3:hover,
+#submit3:active {
+  background-color: #007bff; /* Blue background */
+  color: #ffffff; /* White text color */
+  border-color: transparent;
+}
+
+#submit3:focus {
+  outline: none; /* Remove focus outline */
+}
+
+
+
+
+
+/* Ensure the parent div uses flexbox to align items (if applicable) */
+.parent-divn {
+  display: flex;
+  justify-content: center; /* Center children horizontally */
+  align-items: center; /* Center children vertically */
+}
+
+.results-container {
+  transition: height 0.5s ease-out;
+  overflow: hidden; /* Hide overflow during transition */
+}
+
+#result-p {
+  font-size: 14px;
+}
+
+/* Style for the header container */
+header {
+  background-color: #ffffff; /* A light grey background */
+  /*     box-shadow: 0px 0px 250px rgb(255, 255, 255); /* Subtle shadow for depth */
+  width: 100%;
+  height: 65px; /* New height of the header */
+}
+
+/* Style for the header content */
+.header-content {
+  width: 57%;
+  max-width: 1140px; /* Max width for large screens */
+  margin: 0 auto; /* Centering the content */
+  padding: 20px 1rem; /* Adjusted padding for vertical alignment */
+  font-size: 22px;
+  display: flex; /* Using flexbox for layout */
+  justify-content: space-between; /* Space between title and nav */
+  align-items: center; /* Center items vertically */
+}
+
+footer {
+  background-color: #ffffff; /* A light grey background */
+  width: 100%;
+  height: 60px; /* New height of the header */
+}
+
+/* Style for the header content */
+.footer-content {
+  width: 100%;
+  max-width: 1140px; /* Max width for large screens */
+  margin: 0 auto; /* Centering the content */
+  padding: 27px 1rem; /* Adjusted padding for vertical alignment */
+  font-size: 22px;
+
+  align-items: center; /* Center items vertically */
+  text-align: center;
+}
+
+/* Style for the navigation */
+nav ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  margin-left: 20px; /* Space between nav items */
+}
+
+nav ul li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #333; /* Dark text for contrast */
+  font-size: 20px; /* Slightly larger font size for readability */
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+  color: #007bff; /* Change color on hover */
+}
+
+.verifyme-text {
+  color: rgb(0, 60, 179);
+}
+
+#authorSimilarityResults {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); /* Adjust based on your preference */
+  gap: 10px;
+}
+
+.result-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 50px;
+  overflow: hidden; /* Ensure contents don't overflow the border-radius */
+}
+
+.result-box > div {
+  display: flex;
+  align-items: center; /* Center text vertically */
+  justify-content: center; /* Center text horizontally */
+  width: 100%;
+}
+
+.result-box > div:nth-child(1) {
+  flex-grow: 2; /* Allocate more space to the color div */
+}
+
+.result-box > div:nth-child(2) {
+  flex-grow: 1; /* Less space for the timestamp div */
+  background-color: #f0f0f0; /* Light background for the timestamp */
+}
+
+.a2,
+.Footer_Footer__link__QcW_T {
+  display: inline-block; /* This will make the span and a tag as wide as its content */
+  position: relative; /* Needed for the absolute positioning of the pseudo-element to work correctly */
+  text-decoration: none; /* Removes underline from links */
+  color: #000000; /* Sets the text color to black */
+  font-size: 15px; /* Sets the font size */
+}
+
+.Footer_Footer__link__QcW_T:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px; /* Adjust this value to move the line closer or further from the text */
+  height: 2px;
+  background-color: #000000; /* Line color */
+
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.Footer_Footer__link__QcW_T:hover:after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+a {
+  text-decoration: none;
+  font: #000000;
+}
+
+.a2 {
+  text-decoration: none;
+  color: #000000; /* This sets the text color to black */
+  font-size: 15px;
+  display: inline-block; /* Allows the link to shrink/grow with its content */
+}
+
+#modelConfidenceContainer {
+  width: 100%;
+  max-width: 600px; /* Adjust based on your layout */
+  height: 15px; /* Height of the slider */
+  position: relative;
+  margin: 20px auto;
+  color: #ffffff;
+}
+
+.confidence-scale {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to right,
+    #d53e4f,
+    #f46d43,
+    #fdae61,
+    #fee08b,
+    #e6f598,
+    #abdda4,
+    #66c2a5,
+    #3288bd
+  );
+  border-radius: 25px;
+}
+
+.confidence-indicator {
+  width: 5px;
+  height: 13px;
+  border-radius: 10%;
+  background-color: #000000;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Cube Animation Styles */
+.cube {
+  margin: 20px auto; /* Adjusted for better positioning */
+  font-size: 24px;
+  height: 1em;
+  width: 1em;
+  position: relative;
+  transform: rotatex(30deg) rotatey(45deg);
+  transform-style: preserve-3d;
+  animation: cube-spin 1.5s infinite ease-in-out alternate;
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform-style: preserve-3d;
+}
+
+.side::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: currentcolor;
+  transform: translatez(0.5em);
+  animation: cube-explode 1.5s infinite ease-in-out;
+  opacity: 0.5;
+}
+
+.side:nth-child(1) {
+  transform: rotatey(90deg);
+}
+.side:nth-child(2) {
+  transform: rotatey(180deg);
+}
+.side:nth-child(3) {
+  transform: rotatey(270deg);
+}
+.side:nth-child(4) {
+  transform: rotatey(360deg);
+}
+.side:nth-child(5) {
+  transform: rotatex(90deg);
+}
+.side:nth-child(6) {
+  transform: rotatex(270deg);
+}
+
+@keyframes cube-spin {
+  0% {
+    transform: rotatex(30deg) rotatey(45deg);
+  }
+  100% {
+    transform: rotatex(30deg) rotatey(405deg);
+  }
+}
+
+@keyframes cube-explode {
+  0% {
+    transform: translatez(0.5em);
+  }
+  50% {
+    transform: translatez(0.75em);
+  }
+  100% {
+    transform: translatez(0.5em);
+  }
+}
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer; /* Optional: Changes the cursor on hover */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+
+  width: 120px;
+  background-color: #f8f9fa; /* Light background for the tooltip */
+  color: #333; /* Dark text color for readability */
+  text-align: center;
+  padding: 8px 0px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 66.6%;
+  left: 50%;
+  transform: translateX(-50%) scale(0); /* Start scaled down and centered */
+  transition: visibility 0.05s, opacity 0.05s ease-in-out, transform 0.1s ease;
+  transition-delay: 0s, 0s, 0.2s; /* Delay the transform transition */
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #f8f9fa transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  display: inline-block;
+
+  transform: translateX(-50%) scale(1); /* Scale to normal size */
+  transition-delay: 0s, 0s, 0s; /* Reset transition delay */
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Or a specific height */
+}
+
+.spinner {
+  position: relative;
+  z-index: 1000;
+  height: 35px;
+  width: 35px;
+  /* No need for transform here */
+}
+
+[class^="ball-"] {
+  position: absolute;
+  display: block;
+  left: 0px;
+  width: 10px;
+  height: 10px;
+  border-radius: 6px;
+  transition: all 0.5s;
+  animation: circleRotate 4s both infinite;
+  transform-origin: 0 250% 0;
+}
+
+.ball-1 {
+  background-color: #2196f3;
+  z-index: -1;
+  animation-timing-function: cubic-bezier(0.5, 0.3, 0.9, 0.9);
+}
+.ball-2 {
+  background-color: #03a9f4;
+  z-index: -2;
+  animation-timing-function: cubic-bezier(0.5, 0.6, 0.9, 0.9);
+}
+.ball-3 {
+  background-color: #00bcd4;
+  z-index: -3;
+  animation-timing-function: cubic-bezier(0.5, 0.9, 0.9, 0.9);
+}
+.ball-4 {
+  background-color: #009688;
+  z-index: -4;
+  animation-timing-function: cubic-bezier(0.5, 1.2, 0.9, 0.9);
+}
+.ball-5 {
+  background-color: #4caf50;
+  z-index: -5;
+  animation-timing-function: cubic-bezier(0.5, 1.5, 0.9, 0.9);
+}
+.ball-6 {
+  background-color: #8bc34a;
+  z-index: -6;
+  animation-timing-function: cubic-bezier(0.5, 1.8, 0.9, 0.9);
+}
+.ball-7 {
+  background-color: #cddc39;
+  z-index: -7;
+  animation-timing-function: cubic-bezier(0.5, 2.1, 0.9, 0.9);
+}
+.ball-8 {
+  background-color: #ffeb3b;
+  z-index: -8;
+  animation-timing-function: cubic-bezier(0.5, 2.4, 0.9, 0.9);
+}
+
+@keyframes circleRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(1440deg);
+  }
+}
+
+.result-delete-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  cursor: pointer;
+  display: none; /* Initially hidden */
+  font-size: 20px; /* Adjust based on your box size */
+}
+
+.edit-mode .result-delete-icon {
+  display: block; /* Show only in edit mode */
+}
+
+.tooltip {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* Ensure background color is set here or in a manner that dynamically applies based on another class or inline style */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.selected {
+  border: 3px solid #fff; /* Highlight selection */
+  /* Do not alter other properties that might change the box's appearance */
+}
+
+/* Updated .selected class */
+.selected::after {
+  content: "✕"; /* Using a cross symbol as indicator */
+  color: #fff; /* White color for contrast */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  font-size: 20px; /* Size of the cross */
+  /* Ensure this does not alter the box's original appearance */
+}
+
+.selectedEmb {
+  border: 3px solid #ffffff; /* Highlight selection */
+  /* Do not alter other properties that might change the box's appearance */
+}
+.selectedEmb::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%; /* Adjust vertically to center the bar within the element */
+  height: 2px; /* Thickness of the bar */
+  background-color: #000; /* Color of the bar, change as needed */
+  transform: translateY(-50%); /* Ensure the bar is centered vertically */
+}
+
+/* Base style for both Edit and Delete Selected buttons */
+.button-common {
+  background-color: transparent; /* Transparent background initially */
+  padding: 3px 10px; /* Consistent padding */
+  border-radius: 40px; /* Rounded corners */
+  cursor: pointer; /* Indicates clickability */
+  font-size: 15px; /* Uniform font size */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+}
+
+/* Specific style for Edit button (assume you add class .edit-btn to the Edit button) */
+.edit-btn {
+  color: #007bff; /* Blue text color */
+  border: 2px solid #007bff; /* Blue border */
+}
+
+.edit-btn.clicked,
+.edit-btn:hover {
+  background-color: #007bff; /* Blue background on hover/click */
+  color: #ffffff; /* White text color on hover/click */
+}
+
+/* Specific style for Delete Selected button */
+#deleteSelected {
+  color: #ff8484; /* Soft red color indicating delete action */
+  border: 2px solid #ff8484; /* Matching border color */
+}
+
+#deleteSelected.clicked,
+#deleteSelected:hover {
+  background-color: #ff8484; /* Red background on hover/click */
+  color: #ffffff; /* White text color on hover/click */
+}
+
+/* Specific style for Edit button (assume you add class .edit-btn to the Edit button) */
+.edit-btnEmb {
+  color: #007bff; /* Blue text color */
+  border: 2px solid #007bff; /* Blue border */
+}
+
+.edit-btnEmb.clicked,
+.edit-btnEmb:hover {
+  background-color: #007bff; /* Blue background on hover/click */
+  color: #ffffff; /* White text color on hover/click */
+}
+
+/* Specific style for Delete Selected button */
+#deleteSelectedEmb {
+  color: #ff8484; /* Soft red color indicating delete action */
+  border: 2px solid #ff8484; /* Matching border color */
+}
+
+#deleteSelectedEmb.clicked,
+#deleteSelectedEmb:hover {
+  background-color: #ff8484; /* Red background on hover/click */
+  color: #ffffff; /* White text color on hover/click */
+}
+
+.custom-modal {
+  position: fixed;
+  z-index: 1000; /* Ensuring it's on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent backdrop */
+  padding-top: 5%; /* Adding padding to the top to push the content down */
+}
+
+.custom-modal-content {
+  background-color: var(--light-cyan); /* Light and fresh background */
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px; /* Softened edges */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  width: 80%;
+  max-width: 450px; /* Capped for larger screens */
+  color: var(--russian-violet); /* Rich text color for contrast */
+  font-family: "Inter", sans-serif; /* Consistent typography */
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.custom-modal-close {
+  color: var(--french-blue); /* Pleasant, clickable color */
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px; /* Slightly reduced for elegance */
+  cursor: pointer;
+}
+
+.custom-modal-close:hover,
+.custom-modal-close:focus {
+  color: var(--light-coral); /* Highlight indicating actionability */
+}
+
+/* Additional styles for buttons and links inside the modal */
+.custom-modal button,
+.custom-modal a {
+  background-color: var(--medium-turquoise);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none; /* For anchor tags */
+  display: inline-block; /* For anchor tags to behave like buttons */
+  margin: 5px; /* Spacing around buttons */
+  cursor: pointer; /* Indicating clickability */
+}
+
+.custom-modal button:hover,
+.custom-modal a:hover {
+  background-color: darken(var(--medium-turquoise), 10%);
+}
+
+#toggleEmbeddingsList {
+  cursor: pointer;
+  padding: 3px 10px; /* Consistent padding */
+  border: none;
+  border-radius: 50px;
+  background-color: transparent; /* Transparent background initially */
+  border: 2px solid #007bff; /* Blue border */
+  font-size: 15px; /* Uniform font size */
+
+  color: #007bff;
+  margin-bottom: 10px;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+}
+#toggleEmbeddingsList.clicked,
+#toggleEmbeddingsList:hover {
+  background-color: #007bff; /* Blue background on hover/click */
+  color: #ffffff; /* White text color on hover/click */
+}

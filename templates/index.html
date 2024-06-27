@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stylometric Analysis</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.1.0/chroma.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <a href="/" style="color: #000000"
+          ><span class="verifyme-text">VerifyMe</span
+          ><span> - Authorship Attribution</span></a
+        >
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <!-- Add more navigation links as needed -->
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="content">
+      <br /><br />
+      <div class="center-div">
+        <h2>1. Enter text for analysis</h2>
+        <p>we recommend samples upwards of 500 words</p>
+        <form id="analysisForm" method="post">
+          <textarea
+              id="text"
+              name="mytext"
+              placeholder="Enter Text Here"
+              required
+          ></textarea>
+          <pre id="word">Word count: 0</pre>
+          <input type="submit" value="Generate embedding" /><!--required-->
+          <button id="submit3" type="button" onclick="clearText()">Clear Text</button>
+      </form>
+      
+
+        <p><b>Stylometric Embedding</b></p>
+
+        <div id="result-p">
+          <br />
+
+          The generated embedding will appear here...
+          <br />
+        </div>
+
+        <div class="spinner-container">
+          <div class="spinner">
+            <span class="ball-1"></span>
+            <span class="ball-2"></span>
+            <span class="ball-3"></span>
+            <span class="ball-4"></span>
+            <span class="ball-5"></span>
+            <span class="ball-6"></span>
+            <span class="ball-7"></span>
+            <span class="ball-8"></span>
+            <br />
+            <br />
+            <br />
+          </div>
+        </div>
+
+        <br />
+
+        <h2>2. Select target author</h2>
+        <div id="authorSelection">
+          <select id="existingAuthorIds" oninput="clearNewAuthorId()">
+            <option value="">Select an Author ID</option>
+            <!-- Dynamically populated options -->
+          </select>
+
+          <a><span> --- or --- </span></a>
+
+          <input
+            type="text"
+            id="newAuthorId"
+            maxlength="50"
+            placeholder="Enter new Author ID"
+            style="width: auto"
+            oninput="clearExistingAuthorId()"
+          />
+          <a class="pre2" id="chars"> 0/50</a>
+        </div>
+        <pre id="result-numtexts"></pre>
+
+        <!--  <select id="existingAuthorIds" oninput="clearNewAuthorId()">
+                    <option value="">Select Context Size</option>
+                </select>                  -->
+
+        <h2>3. Analyse Author Similarity</h2>
+
+        <input
+          type="submit"
+          value="Analyse"
+          onclick="predictAuthorship()"
+          readonly
+        />
+        <br /><br />
+        <div class="center2-div">
+          <p><b>Analysis results</b></p>
+
+          <!--  <div class="contentresults">-->
+          <pre>Test ID:<b> <span id="test_id"> &#x25A0;</span> </b> &emsp;Author ID:<b> <span id="author_identifier"> &#x25A0;</span></b></pre>
+
+          <!--graph the 58 values in the 3 samples and compare to the queried sample - matplotlib!-->
+
+          <!-- Modified container for Model Confidence and Loader -->
+          <div class="results-container">
+            <pre>Model Confidence:<b> <span id="results_analysis"> &#x25A0;</span></b></pre>
+            <!-- Cube Loader, initially visible for demonstration -->
+          </div>
+          <!--   </div>-->
+
+          <div id="cube-loader" class="cube" style="display: none">
+            <div class="side"></div>
+            <div class="side"></div>
+            <div class="side"></div>
+            <div class="side"></div>
+            <div class="side"></div>
+            <div class="side"></div>
+          </div>
+
+          <div id="modelConfidenceContainer">
+            <div id="modelConfidenceScale" class="confidence-scale"></div>
+            <div
+              id="modelConfidenceIndicator"
+              class="confidence-indicator"
+            ></div>
+          </div>
+          <!-- Custom Alert Modal -->
+          <div id="customAlertModal" class="custom-modal" style="display: none">
+            <div class="custom-modal-content">
+              <span class="custom-modal-close" onclick="closeCustomAlertModal()"
+                >&times;</span
+              >
+              <p id="customAlertMessage">This is an alert message.</p>
+              <button onclick="closeCustomAlertModal()">OK</button>
+            </div>
+          </div>
+
+          <div
+            id="customConfirmModal"
+            class="custom-modal"
+            style="display: none"
+          >
+            <div class="custom-modal-content">
+              <span
+                class="custom-modal-close"
+                onclick="closeCustomConfirmModal()"
+                >&times;</span
+              >
+              <p id="customConfirmMessage">Are you sure you want to proceed?</p>
+              <div class="modal-actions">
+                <button onclick="confirmAction()">Yes</button>
+                <button onclick="closeCustomConfirmModal()">No</button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="edit-mode-toggle"
+            style="display: flex; align-items: center; gap: 10px"
+          >
+            <p><b>Previous similarity tests</b></p>
+
+            <!-- Edit button -->
+            <button class="button-common edit-btn" onclick="toggleEditMode()">
+              Edit
+            </button>
+
+            <!-- Delete Selected button (initially hidden) -->
+            <button
+              id="deleteSelected"
+              class="button-common"
+              style="display: none"
+              onclick="deleteSelected()"
+            >
+              Delete Selected
+            </button>
+          </div>
+
+          <br />
+          <div id="authorSimilarityResults"></div>
+
+          <br />
+        </div>
+
+        <div id="saveResult2">
+          <!--save authorID, confidence, timestamp-->
+          <a><h2>4. Save Test Result</h2></a>
+          <input
+            type="text"
+            id="newAuthorId2"
+            maxlength="50"
+            placeholder="Test Name (Optional)"
+            style="width: auto"
+          />
+          <a class="pre2" id="chars2"> 0/50</a>
+<br>
+          <input
+            type="submit"
+            value="Save Result"
+            onclick="saveResultn()"
+            readonly
+          />
+        </div>
+
+        <br />
+        <div id="appendSuccessResultMessage"></div>
+        <!-- Placeholder for success message -->
+        <div class="center2-div">
+          <div id="saveResult">
+            <div
+              class="edit-mode-toggle"
+              style="display: flex; align-items: center; gap: 10px"
+            >
+              <p style="font-size: 18px"><b>5. Save Embedding (Optional)</b></p>
+
+              <!-- Edit button -->
+              <button
+                id="embeddingediting"
+                class="button-common edit-btnEmb"
+                onclick="toggleEditModeEmbedding()"
+              >
+                Edit
+              </button>
+
+              <!-- Delete Selected button (initially hidden) -->
+              <button
+                id="deleteSelectedEmb"
+                class="button-common"
+                style="display: none"
+                onclick="deleteSelectedEmbedding()"
+              >
+                Delete Selected
+              </button>
+            </div>
+            <button id="toggleEmbeddingsList">Hide Embeddings</button>
+
+            <br />
+
+            <div id="authorEmbeddingsList" style="display: none"></div>
+
+            <br />
+
+            <input
+              type="submit"
+              value="Save Embedding "
+              onclick="appendEmbedding() "
+              readonly
+            />
+          </div>
+          <!-- Add a new form for CSV file path and authorID -->
+        </div>
+        <br />
+
+        <input
+          type="submit2"
+          value="Clear Submission"
+          onclick="clearFormAndResult()"
+          readonly
+        />
+
+        <div id="appendSuccessMessage"></div>
+        <!-- Placeholder for success message -->
+      </div>
+    </div>
+
+    <br /><br />
+
+    <footer>
+      <p class="center">
+        <a
+          class="a2"
+          href="mailto:19sosullivan@cco.ie?
+            subject=VerifyMe - Enquiry"
+        >
+          <span class="Footer_Footer__link__QcW_T">contact me</span>
+        </a>
+      </p>
+    </footer>
+
+    <script>
+      let confirmCallback = null; // This will hold the callback function for confirmation
+
+      let isEditMode = false; // Track whether edit mode is enabled
+      let isEditModeEmb = false;
+      let selectedTests = []; // Store selected test IDs
+      let selectedEmbeddings = []; // Store selected test embeddings
+
+      const existingAuthorIdSelect =
+        document.getElementById("existingAuthorIds");
+      const newAuthorIdInput = document.getElementById("newAuthorId");
+
+      existingAuthorIdSelect.onchange = clearNewAuthorId;
+      newAuthorIdInput.oninput = clearExistingAuthorId;
+
+      function clearExistingAuthorId() {
+        if (newAuthorIdInput.value.trim()) {
+          existingAuthorIdSelect.value = "";
+        }
+        updateEmbeddingCount();
+      }
+
+      function clearNewAuthorId() {
+        if (existingAuthorIdSelect.value) {
+          newAuthorIdInput.value = "";
+          document.getElementById("chars").textContent = "0/10";
+        }
+        updateEmbeddingCount();
+      }
+
+      const textarea = document.getElementById("text");
+
+      textarea.addEventListener("input", autoResize, false);
+
+      function autoResize() {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+      }
+
+      // let selectedCsvFile = '';
+      let selectedCsvFilee = "embeddings.csv";
+      let ConfidenceScore = 0;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Prepopulate the dropdown with author IDs when the page loads
+        fetchAuthorIds();
+        const spinner = document.querySelector(".spinner");
+        spinner.style.display = "none"; // Show the animation
+
+        document.getElementById("modelConfidenceIndicator").style.display =
+          "none"; // Hide the cube loader
+
+        document.getElementById("modelConfidenceScale").style.display = "block"; // Hide the cube loader
+
+        const editBtn = document.querySelector(".edit-btn"); // Selector for your Edit button
+        const deleteBtn = document.getElementById("deleteSelected"); // Selector for your Delete Selected button
+
+        const editBtnEmb = document.querySelector(".edit-btnEmb"); // Selector for your Edit button
+        const deleteBtnEmb = document.getElementById("deleteSelectedEmb"); // Selector for your Delete Selected button
+
+        document
+          .getElementById("analysisForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+
+            if (spinner) {
+              console.log("Showing animation...");
+              spinner.style.display = "block"; // Show the animation
+            } else {
+              console.log("Animation container not found.");
+            }
+
+            const formData = new FormData(this);
+            const searchParams = new URLSearchParams();
+            for (const pair of formData) {
+              searchParams.append(pair[0], pair[1]);
+            }
+
+            //document.getElementById("result-p").innerHTML = "<br><br /><br /><br /><br /><br />";
+            document.getElementById("result-p").innerHTML = "";
+
+            fetch("/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: searchParams,
+            })
+              .then((response) => response.text()) // Assuming the response is text; adjust if JSON
+              .then((text) => {
+                // Hide the cube animation when the embedding is generated
+                if (spinner) {
+                  console.log("Hiding animation...");
+                  spinner.style.display = "none"; // Hide the animation
+                }
+                document.getElementById("result-p").innerHTML = text;
+              })
+              .catch((error) => {
+                console.error(
+                  "Error while trying to generate embedding:",
+                  error
+                );
+                document.getElementById("result-p").innerHTML =
+                  "An error occurred.";
+
+                // Ensure the animation is hidden even if the fetch fails
+                if (spinner) {
+                  console.log("Hiding animation...");
+                  spinner.style.display = "none"; // Hide the animation
+                }
+              });
+          });
+      });
+
+      function showCustomAlert(message) {
+        document.getElementById("customAlertMessage").innerText = message;
+        document.getElementById("customAlertModal").style.display = "block";
+      }
+
+      function closeCustomAlertModal() {
+        document.getElementById("customAlertModal").style.display = "none";
+      }
+
+      function showCustomConfirm(message, callback) {
+        document.getElementById("customConfirmMessage").innerText = message;
+        document.getElementById("customConfirmModal").style.display = "block";
+        confirmCallback = callback; // Store the callback function
+      }
+
+      function closeCustomConfirmModal() {
+        document.getElementById("customConfirmModal").style.display = "none";
+      }
+
+      function confirmAction() {
+        if (typeof confirmCallback === "function") {
+          confirmCallback(); // Execute the callback function if available
+        }
+        closeCustomConfirmModal(); // Close the modal
+      }
+
+      function appendEmbedding() {
+        const testName = document.getElementById("newAuthorId2").value.trim() ? document.getElementById("newAuthorId2").value : ' ';
+
+        const newAuthorId = document.getElementById("newAuthorId").value.trim();
+        const existingAuthorId =
+          document.getElementById("existingAuthorIds").value;
+        const authorId = newAuthorId || existingAuthorId; // Use newAuthorId if available; otherwise, use existingAuthorId.
+        const embedding = document.getElementById("result-p").textContent;
+
+    //   const aeee = document.getElementById("results_analysis").textContent;
+
+       // console.log("the text content is: " + aeee);
+        const resultScore = parseFloat(
+          document.getElementById("results_analysis").textContent
+        );
+
+        // Define the threshold for the discrepancy
+        const discrepancyThreshold = 0.5;
+
+        // Check if the last recorded score is below the threshold
+        if (resultScore < discrepancyThreshold) {
+          // Display an error message to the user
+          showCustomAlert(
+            "Error: The discrepancy in the recorded score is too large to save the embedding. Please review the results."
+          );
+          return; // Stop the function
+        }
+
+        // Check if embedding and authorId are available
+        if (
+          !embedding ||
+          embedding === "The generated embedding will appear here..." ||
+          !authorId
+        ) {
+          showCustomAlert(
+            "Please generate an embedding and select or enter an Author ID."
+          );
+          return;
+        }
+
+        fetch("/append", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ authorId, testName, embedding }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              // Server responded with an error status
+              throw new Error(
+                "Server responded with an error: " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            //document.getElementById('saveResult').textContent = data.message;
+            console.log(document.getElementById("appendSuccessMessage"));
+            let successMessageElement = document.getElementById(
+              "appendSuccessMessage"
+            );
+            successMessageElement.style.color = "green";
+            successMessageElement.innerHTML =
+              "Embedding appended successfully!";
+            fetchAndDisplayEmbeddings(authorId);
+            //clearFormAndResult();
+
+            // Set a timeout to clear the success message after 1 second (1000 milliseconds)
+            setTimeout(() => {
+              successMessageElement.textContent = ""; // Clear the message
+            }, 2000); // Time delay of 1 second
+          })
+          .catch((error) => {
+            console.error("Caught the following error:", error);
+            //document.getElementById('saveResult').textContent = 'Error Caught During Embedding Appending.';
+
+            let successMessageElement = document.getElementById(
+              "appendSuccessMessage"
+            );
+            successMessageElement.style.color = "red";
+            successMessageElement.innerHTML =
+              "Error Caught During Embedding Appending.";
+          });
+      }
+
+      // Function fetchAuthorIds remains largely the same, but ensure it works with the newly uploaded file
+      function fetchAuthorIds() {
+        // The fetch URL should match the Flask route exactly.
+        fetch("/get_author_ids", {
+          method: "GET", // Changed to GET to match the Flask route
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const select = document.getElementById("existingAuthorIds");
+            select.innerHTML = '<option value="">Select an Author ID</option>'; // Reset dropdown
+            data.forEach((authorId) => {
+              const option = new Option(authorId, authorId);
+              select.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Fetch author IDs failed:", error);
+          });
+      }
+
+      document
+        .getElementById("toggleEmbeddingsList")
+        .addEventListener("click", function () {
+          const embeddingsList = document.getElementById(
+            "authorEmbeddingsList"
+          );
+          if (embeddingsList.style.display === "none") {
+            embeddingsList.style.display = "flex"; // Or 'block', depending on your layout
+            this.textContent = "Hide Embeddings"; // Change button text
+
+            document.getElementById("embeddingediting").style.display = "block";
+          } else {
+            embeddingsList.style.display = "none";
+            this.textContent = "Show Embeddings"; // Reset button text
+            document.getElementById("embeddingediting").style.display = "none";
+          }
+        });
+
+      function updateModelConfidence(confidenceScore) {
+        document.getElementById("modelConfidenceIndicator").style.display =
+          "block";
+        document.getElementById("modelConfidenceScale").style.display = "block";
+
+        confidenceScore = parseFloat(confidenceScore);
+
+        // Correcting normalization
+        //const normalizedScore = (confidenceScore - (-0.3)) / (1.2 - (-0.3));
+        //const normalizedSore = confidenceScore
+
+        const scaleContainer = document.getElementById(
+          "modelConfidenceContainer"
+        );
+        const indicator = document.getElementById("modelConfidenceIndicator");
+
+        // Ensure the container has a non-zero width
+        const containerWidth = scaleContainer.offsetWidth;
+
+        // Calculate position based on container width
+        let position = confidenceScore * containerWidth;
+
+        // Set a minimum and maximum position to ensure the indicator stays within the scale
+        position = Math.max(
+          0,
+          Math.min(position, containerWidth - indicator.offsetWidth)
+        );
+
+        console.log(
+          `Normalized score: ${confidenceScore}, Position: ${position}px`
+        );
+
+        // Apply the calculated position
+        indicator.style.left = `${position}px`;
+      }
+
+      function predictAuthorship() {
+        // Retrieve the author ID and the embedding content
+        const existingAuthorId =
+          document.getElementById("existingAuthorIds").value;
+        const newAuthorId = document.getElementById("newAuthorId").value.trim();
+        const embeddingContent =
+          document.getElementById("result-p").textContent;
+
+        // Check if neither an author ID has been selected nor an embedding has been generated
+        if (
+          !existingAuthorId &&
+          !newAuthorId &&
+          (!embeddingContent ||
+            embeddingContent === "The generated embedding will appear here...")
+        ) {
+          showCustomAlert(
+            "Please select or enter an Author ID and generate an embedding before analyzing."
+          );
+          return; // Stop the function from proceeding further
+        }
+
+        // Check if an author ID has been selected
+        if (!existingAuthorId && !newAuthorId) {
+          showCustomAlert("Please select or enter an Author ID.");
+          return; // Stop the function from proceeding further
+        }
+
+        // Check if an embedding has been generated
+        if (
+          !embeddingContent ||
+          embeddingContent === "The generated embedding will appear here..."
+        ) {
+          showCustomAlert("Please generate an embedding before analyzing.");
+          return; // Stop the function from proceeding further
+        }
+
+        // The rest of your function where you proceed with the analysis
+        // Display loading indicators
+        document.getElementById("modelConfidenceIndicator").style.display =
+          "none";
+        document.getElementById("modelConfidenceScale").style.display = "none";
+        document.getElementById("cube-loader").style.display = "block";
+
+        const authorId = existingAuthorId || newAuthorId;
+
+        // Update the author ID in the results section
+        document.getElementById("author_identifier").textContent =
+          authorId || "Not Specified";
+        document.getElementById("author_identifier").style.display = "inline";
+
+        // Fetch the next test ID
+        fetch("/next_test_id")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Received next test ID:", data.next_test_id); // Debugging line
+            document.getElementById("test_id").textContent =
+              data.next_test_id || "Unavailable";
+            document.getElementById("test_id").style.display = "inline";
+
+            // After fetching the next test ID, proceed with the authorship prediction
+            const embedding = document.getElementById("result-p").textContent;
+            return fetch("/predict_authorship", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ authorId, embedding }),
+            });
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Server responded with an error: " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data); // Inspect data structure
+            document.getElementById("results_analysis").style.display =
+              "inline";
+            document.getElementById("results_analysis").textContent =
+              data.result;
+            document.getElementById("cube-loader").style.display = "none"; // Hide loader
+            updateModelConfidence(data.result);
+          })
+          .catch((error) => {
+            console.error("Caught the following error:", error);
+            document.getElementById("results_analysis").textContent =
+              "Error caught while trying to predict authorship.";
+            document.getElementById("cube-loader").style.display = "none"; // Hide loader
+          });
+      }
+
+      function updateEmbeddingCount() {
+        const authorId =
+          document.getElementById("existingAuthorIds").value ||
+          document.getElementById("newAuthorId").value.trim();
+        if (!authorId) {
+          //console.log('No author ID selected or entered.');
+          document.getElementById(
+            "result-numtexts"
+          ).innerHTML = ` Total texts for selected author: 0`;
+
+          return;
+        }
+        fetchAndDisplayResults(authorId);
+        fetchAndDisplayEmbeddings(authorId);
+
+        fetch(`/count_embeddings/${authorId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById(
+              "result-numtexts"
+            ).innerHTML = ` Total texts for selected author: ${data.count}`;
+          })
+          .catch((error) => {
+            console.error("Error fetching embedding count:", error);
+          });
+      }
+
+      
+      function clearText() {
+        // Clear the textarea for new author text input
+        document.getElementById("text").value = "";
+        // Reset the textarea's height to its default or a specific value
+        document.getElementById("text").style.height = "auto"; // Or "100px" or any other initial height
+
+        document.getElementById("word").textContent = "Word count: 0";
+        document.getElementById("result-p").innerHTML =
+          "<br />The generated embedding will appear here...";}
+
+      function clearFormAndResult() {
+        // Clear the textarea for new author text input
+        document.getElementById("text").value = "";
+        // Reset the textarea's height to its default or a specific value
+        document.getElementById("text").style.height = "auto"; // Or "100px" or any other initial height
+
+        // Reset the author IDs dropdown
+        // This assumes you have a function fetchAuthorIds() that repopulates the dropdown
+        fetchAuthorIds();
+
+        // Clear the new author ID input field
+        document.getElementById("newAuthorId").value = "";
+        document.getElementById("modelConfidenceIndicator").style.display =
+          "none"; // Hide the cube loader
+        document.getElementById("results_analysis").textContent = " \u25A0";
+        document.getElementById("test_id").textContent = " \u25A0";
+        document.getElementById("author_identifier").textContent = " \u25A0";
+        const contentDiv = document.querySelector(".contentresults");
+        if (contentDiv) {
+          contentDiv.innerHTML = "";
+        }
+
+        document.getElementById("word").textContent = "Word count: 0";
+        document.getElementById("chars").textContent = "0/10";
+
+        // Reset the display of the result and any selected CSV or author ID info
+        document.getElementById("result-p").innerHTML =
+          "<br />The generated embedding will appear here...";
+        // Clear the heatmap display
+        document.getElementById("authorSimilarityResults").innerHTML = ""; // Added line to clear the heatmap
+        document.getElementById("authorEmbeddingsList").innerHTML = ""; // Added line to clear the heatmap
+      }
+
+      let word = document.getElementById("word");
+      let area = document.getElementById("text");
+
+      area.addEventListener("input", function () {
+        // count characters
+        let content = this.value;
+
+        // remove empty spaces from start and end
+        content.trim();
+        //console.log(content);
+
+        let wordList = content.split(/\s/);
+
+        // Remove spaces from between words
+        let words = wordList.filter(function (element) {
+          return element != "";
+        });
+
+        // count words
+        word.textContent = "Word count: " + words.length;
+      });
+      let chars2 = document.getElementById("chars2");
+      let chars = document.getElementById("chars");
+      let areaid = document.getElementById("newAuthorId");
+      let areaid2 = document.getElementById("newAuthorId2");
+
+      areaid.addEventListener("input", function () {
+        // count characters
+        let content = this.value;
+        chars.textContent = " " + content.length + "/50";
+      });
+
+      areaid2.addEventListener("input", function () {
+        // count characters
+        let content2 = this.value;
+        chars2.textContent = " " + content2.length + "/50";
+      });
+
+
+
+
+
+      function fetchAndDisplayResults(authorId) {
+        fetch(`/get_author_results/${authorId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.getElementById(
+              "authorSimilarityResults"
+            );
+            container.innerHTML = ""; // Clear previous results
+
+            // Set up the container using Flexbox, with added padding for equal left and right space
+            container.style.display = "flex";
+            container.style.flexWrap = "wrap";
+            container.style.justifyContent = "flex-start"; // Align items to the start
+            container.style.alignItems = "stretch"; // This makes the items stretch to fill the container height
+            container.style.gap = "5px"; // This replaces margin for spacing between boxes
+            container.style.padding = "0 45px"; // Adjust padding as needed for equal left and right padding
+
+            data.forEach((result) => {
+              const box = document.createElement("div");
+              box.className = "tooltip";
+              box.dataset.testId = result.TestID; // Store the test ID
+
+              box.style.width = "45px"; // Adjust width for desired number of boxes, considering gap
+              box.style.height = "45px"; //65 was good
+              box.style.display = "flex";
+              box.style.borderRadius = "7px";
+              box.style.alignItems = "center";
+              box.style.justifyContent = "center";
+              box.style.position = "relative";
+
+              let normalizedResult = result.Result;
+              const color = chroma
+                .scale("Spectral")(Math.max(0, Math.min(normalizedResult, 1)))
+                .css();
+              box.style.backgroundColor = color;
+
+              // Create tooltip content
+              const tooltipText = document.createElement("span");
+              tooltipText.className = "tooltiptext"; // Use the tooltiptext class for the tooltip
+              tooltipText.textContent = `Score: ${(
+                normalizedResult * 100
+              ).toFixed(1)}%\n${formatTimestamp(result.Timestamp)}`;
+              box.appendChild(tooltipText);
+
+              // Box click event
+              // Inside fetchAndDisplayResults, add event listener to each box
+
+              box.addEventListener("click", function () {
+                // Ignore clicks unless in edit mode
+                if (!isEditMode) return;
+
+                box.style.width = "45px"; // Adjust width for desired number of boxes, considering gap
+                box.style.height = "45px"; //65 was good
+                box.style.display = "flex";
+                box.style.borderRadius = "7px";
+                box.style.alignItems = "center";
+                box.style.justifyContent = "center";
+                box.style.position = "relative";
+                const isSelected = selectedTests.includes(result.TestID);
+                if (isSelected) {
+                  // Remove from selected tests
+                  selectedTests = selectedTests.filter(
+                    (id) => id !== result.TestID
+                  );
+                  this.classList.remove("selected");
+                } else {
+                  // Add to selected tests
+                  selectedTests.push(result.TestID);
+                  this.classList.add("selected");
+                }
+
+                // Update visibility of the delete icon based on selection
+                //updateDeleteIconVisibility(this, isSelected);
+              });
+
+              container.appendChild(box);
+            });
+          })
+          .catch((error) =>
+            console.error("Error fetching author results:", error)
+          );
+      }
+
+      function fetchAndDisplayEmbeddings(authorId) {
+        fetch(`/get_author_embeddings/${authorId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.getElementById("authorEmbeddingsList");
+
+            container.innerHTML = ""; // Clear previous results
+
+            // Set up the container using Flexbox, with added padding for equal left and right space
+            container.style.display = "flex";
+            container.style.flexWrap = "wrap";
+            container.style.justifyContent = "flex-start"; // Align items to the start
+            container.style.alignItems = "stretch"; // This makes the items stretch to fill the container height
+            container.style.gap = "5px"; // This replaces margin for spacing between boxes
+            container.style.padding = "0 45px"; // Adjust padding as needed for equal left and right padding
+
+            data.forEach((result) => {
+              const box = document.createElement("div");
+              box.className = "tooltip";
+              box.dataset.testId = result.EmbeddingID; // Store the test ID
+              box.dataset.testName = result.TestName; // Store the test name
+
+
+              box.style.width = "100%"; // Adjust width for desired number of boxes, considering gap
+              box.style.height = "45px"; //65 was good
+              box.style.display = "flex";
+              box.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; // Example shadow
+
+              box.style.borderRadius = "7px";
+              box.style.alignItems = "left";
+              box.style.paddingLeft = "10px";
+              box.style.justifyContent = "left";
+              box.style.position = "relative";
+
+              box.style.backgroundColor = "white";
+              box.innerHTML = `<i>ID: ${
+                result.EmbeddingID
+              }</i>: ${formatTimestampMonths(result.Timestamp)}.&nbsp;<b>${result.TestName}</b>`;
+
+              // Box click event
+              // Inside fetchAndDisplayResults, add event listener to each box
+
+              box.addEventListener("click", function () {
+                // Ignore clicks unless in edit mode
+                if (!isEditModeEmb) return;
+
+                box.style.width = "100%"; // Adjust width for desired number of boxes, considering gap
+                box.style.height = "45px"; //65 was good
+                box.style.display = "flex";
+                box.style.borderRadius = "7px";
+                box.style.alignItems = "left";
+                box.style.justifyContent = "left";
+                box.style.position = "relative";
+
+                box.style.backgroundColor = "white";
+
+                const isSelected = selectedEmbeddings.includes(
+                  result.EmbeddingID
+                );
+                if (isSelected) {
+                  // Remove from selected tests
+                  selectedEmbeddings = selectedEmbeddings.filter(
+                    (id) => id !== result.EmbeddingID
+                  );
+                  this.classList.remove("selectedEmb");
+                } else {
+                  // Add to selected tests
+                  selectedEmbeddings.push(result.EmbeddingID);
+                  this.classList.add("selectedEmb");
+                }
+
+                // Update visibility of the delete icon based on selection
+                //updateDeleteIconVisibility(this, isSelected);
+              });
+
+              container.appendChild(box);
+            });
+          })
+          .catch((error) =>
+            console.error("Error fetching author results:", error)
+          );
+      }
+
+      function toggleEditMode() {
+        console.log("Toggling Edit Mode"); // Debugging log
+
+        isEditMode = !isEditMode;
+
+        const editModeButton = document.querySelector(".edit-btn");
+        const deleteButton = document.getElementById("deleteSelected");
+
+        // Toggle button states
+        editModeButton.textContent = isEditMode ? "Exit Edit Mode" : "Edit";
+        deleteButton.style.display = isEditMode ? "block" : "none";
+
+        // Clear selections if exiting edit mode
+        if (!isEditMode) {
+          document
+            .querySelectorAll(".selected")
+            .forEach((el) => el.classList.remove("selected"));
+          selectedTests = []; // Clear the selection array if necessary
+        }
+      }
+
+      function toggleEditModeEmbedding() {
+        console.log("Toggling Edit Mode Embedding"); // Debugging log
+
+        isEditModeEmb = !isEditModeEmb;
+
+        const editModeEmbButton = document.querySelector(".edit-btnEmb");
+        const deleteEmbButton = document.getElementById("deleteSelectedEmb");
+
+        // Toggle button states
+        editModeEmbButton.textContent = isEditModeEmb
+          ? "Exit Edit Mode"
+          : "Edit";
+        deleteEmbButton.style.display = isEditModeEmb ? "block" : "none";
+
+        // Clear selections if exiting edit mode for embeddings
+        if (!isEditModeEmb) {
+          document
+            .querySelectorAll(".selectedEmb")
+            .forEach((el) => el.classList.remove("selectedEmb"));
+          selectedEmbeddingss = []; // Clear the selection array if necessary
+        }
+      }
+
+      // Function to clear selections
+      function clearSelections(selector, selectionArray) {
+        document.querySelectorAll(selector).forEach((element) => {
+          element.classList.remove("selected", "selectedEmb");
+          // Additional logic to remove any dynamically added content or styles
+        });
+        selectionArray.length = 0; // Clear the selection array
+      }
+
+      function selectTest(testId, element) {
+        if (isEditMode) {
+          const index = selectedTests.indexOf(testId);
+          if (index > -1) {
+            selectedTests.splice(index, 1);
+            element.classList.remove("selected"); // Visual feedback
+          } else {
+            selectedTests.push(testId);
+            element.classList.add("selected"); // Visual feedback
+          }
+        }
+      }
+
+      function selectEmbedding(EmbeddingID, element) {
+        if (isEditModeEmb) {
+          const index = selectedEmbeddings.indexOf(EmbeddingID);
+          if (index > -1) {
+            selectedEmbeddings.splice(index, 1);
+            element.classList.remove("selectedEmb"); // Visual feedback
+          } else {
+            selectedEmbeddings.push(EmbeddingID);
+            element.classList.add("selectedEmb"); // Visual feedback
+          }
+        }
+      }
+
+      function showModal(message, onConfirm) {
+        const modal = document.getElementById("confirmationModal");
+        const modalText = document.querySelector(
+          "#confirmationModal .modal-content p"
+        );
+        const confirmButton = document.getElementById("confirmDelete");
+        const cancelButton = document.getElementById("cancelDelete");
+
+        modalText.textContent = message; // Set the text content of the modal
+
+        // Show or hide the confirm button based on whether an onConfirm callback is provided
+        if (onConfirm) {
+          confirmButton.style.display = "";
+          confirmButton.onclick = () => {
+            onConfirm();
+            modal.style.display = "none";
+          };
+        } else {
+          confirmButton.style.display = "none";
+        }
+
+        // Always allow closing the modal
+        cancelButton.onclick = () => (modal.style.display = "none");
+        document.querySelector("#confirmationModal .close").onclick = () =>
+          (modal.style.display = "none");
+
+        modal.style.display = "block";
+      }
+
+      function hideModal() {
+        document.getElementById("confirmationModal").style.display = "none";
+      }
+
+      async function deleteSelected() {
+        // Check if there are selected tests to delete
+        if (selectedTests.length > 0) {
+          // Use the custom confirm modal instead of the native confirm dialog
+          showCustomConfirm(
+            "Are you sure you want to delete the selected test result(s))?",
+            async () => {
+              // This code is now in the callback function and will execute upon confirmation
+              for (let testId of selectedTests) {
+                try {
+                  await fetch(`/delete_test_result/${testId}`, {
+                    method: "POST",
+                  });
+                  // Log or handle success response if needed
+                } catch (error) {
+                  console.error("Error deleting test result:", error);
+                  // Optionally, inform the user of the failure
+                }
+              }
+
+              // Clear selected tests after deletion
+              selectedTests = [];
+
+              // Assuming you have a function to refresh the results list and an authorId in scope
+              const authorId =
+                document.getElementById("existingAuthorIds").value ||
+                document.getElementById("newAuthorId").value.trim();
+              fetchAndDisplayResults(authorId); // Refresh the results display to reflect deletions
+
+              // Exit edit mode
+              isEditMode = false;
+              document.getElementById("deleteSelected").style.display = "none"; // Hide the Delete Selected button
+
+              updateEditModeUI(); // Update the UI to reflect the new state
+            }
+          );
+        } else {
+          showCustomAlert("No tests selected for deletion.");
+        }
+      }
+
+      function updateEditModeUI() {
+        const editButton = document.querySelector(".edit-btn"); // Adjust selector as needed
+        const editButtonEmb = document.querySelector(".edit-btnEmb"); // Adjust selector as needed
+
+        const deleteButton = document.getElementById("deleteSelected"); // Adjust selector as needed
+        const deleteButtonEmb = document.getElementById("deleteSelectedEmb"); // Adjust selector as needed
+        editButton.textContent = isEditMode ? "Exit Edit Mode" : "Edit";
+        deleteButton.style.display = isEditMode ? "block" : "none";
+        editButtonEmb.textContent = isEditMode ? "Exit Edit Mode" : "Edit";
+        deleteButtonEmb.style.display = isEditMode ? "block" : "none";
+      }
+      async function deleteSelectedEmbedding() {
+        // Check if there are selected tests to delete
+        if (selectedEmbeddings.length > 0) {
+          // Use the custom confirm modal instead of the native confirm dialog
+          showCustomConfirm(
+            "Are you sure you want to delete the selected embedding(s)?",
+            async () => {
+              // This code is now in the callback function and will execute upon confirmation
+              for (let EmbeddingID of selectedEmbeddings) {
+                try {
+                  await fetch(`/delete_embedding_result/${EmbeddingID}`, {
+                    method: "POST",
+                  });
+                  // Log or handle success response if needed
+                } catch (error) {
+                  console.error("Error deleting test result:", error);
+                  // Optionally, inform the user of the failure
+                }
+              }
+
+              // Clear selected tests after deletion
+              selectedEmbeddings = [];
+
+              // Assuming you have a function to refresh the results list and an authorId in scope
+              const authorId =
+                document.getElementById("existingAuthorIds").value ||
+                document.getElementById("newAuthorId").value.trim();
+              fetchAndDisplayEmbeddings(authorId); // Refresh the results display to reflect deletions
+
+              // Exit edit mode
+              isEditModeEmb = false;
+              document.getElementById("deleteSelectedEmb").style.display =
+                "none"; // Hide the Delete Selected button
+              updateEditModeUI(); // Update the UI to reflect the new state
+            }
+          );
+        } else {
+          showCustomAlert("No embeddings selected for deletion.");
+        }
+      }
+
+      function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // Numeric month
+        const day = date.getDate();
+        let hour = date.getHours();
+        let minutes = date.getMinutes();
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        const formattedDate = `${month}/${day}/${year.toString().substr(-2)}`; // MM/DD/YY format
+        const time = `${hour}:${minutes}`;
+
+        return `${formattedDate}, ${time}`; // Compact date-time format
+      }
+
+      function formatTimestampMonths(timestamp) {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        // Subtract 1 from getMonth() to index array correctly since months in JavaScript are 0-indexed
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+        let hour = date.getHours();
+        let minutes = date.getMinutes();
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        const formattedDate = `${month} ${day}, ${year.toString().substr(-2)}`; // Format: Month day, YY
+        const time = `${hour}:${minutes}`;
+
+        return `${formattedDate}, ${time}`; // Returns: "Month day, YY, HH:MM"
+      }
+
+
+
+      function saveResultn() {
+
+        const testName = document.getElementById("newAuthorId2").value.trim() ? document.getElementById("newAuthorId2").value : ' ';
+      
+        const newAuthorId = document.getElementById("newAuthorId").value.trim();
+        const existingAuthorId =
+          document.getElementById("existingAuthorIds").value;
+        const authorId = newAuthorId || existingAuthorId; // Use newAuthorId if available; otherwise, use existingAuthorId.
+        const result = document.getElementById("results_analysis").textContent;
+
+        if (
+          !result ||
+          result === "The generated embedding will appear here..." ||
+          !authorId
+        ) {
+          showCustomAlert(
+            "Please generate a result and select or enter an Author ID."
+          );
+          return;
+        }
+        fetch("/append_result", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ testName, authorId, result }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              // Server responded with an error status
+              throw new Error(
+                "Server responded with an error: " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            //document.getElementById('saveResult').textContent = data.message;
+            console.log(document.getElementById("appendSuccessResultMessage"));
+            let successMessageElement = document.getElementById(
+              "appendSuccessResultMessage"
+            );
+            fetchAndDisplayResults(authorId);
+
+            successMessageElement.style.color = "green";
+            successMessageElement.innerHTML = "Result appended successfully!";
+
+            // clearFormAndResult();
+
+            // Set a timeout to clear the success message after 1 second (1000 milliseconds)
+            setTimeout(() => {
+              successMessageElement.textContent = ""; // Clear the message
+            }, 2000); // Time delay of 1 second
+          })
+          .catch((error) => {
+            console.error("Caught the following error:", error);
+            //document.getElementById('saveResult').textContent = 'Error Caught During Embedding Appending.';
+
+            let successMessageElement = document.getElementById(
+              "appendSuccessResultMessage"
+            );
+            successMessageElement.style.color = "red";
+            successMessageElement.innerHTML =
+              "Error Caught During Embedding Appending.";
+          });
+      }
+
+      /*
+
+old
+      function fetchAndDisplayResults(authorId) {
+        fetch(`/get_author_results/${authorId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const container = document.getElementById(
+              "authorSimilarityResults"
+            );
+            container.innerHTML = ""; // Clear previous results
+            data.forEach((result) => {
+              const box = document.createElement("div");
+              box.className = "result-box";
+
+              const colorDiv = document.createElement("div");
+              colorDiv.style.height = "66%";
+
+              // Ensure the result is between 0 and 1
+              let normalizedResult = result.Result;
+              normalizedResult = Math.max(0, Math.min(normalizedResult, 1));
+
+              // Use chroma.js to map the normalized result to the Viridis color scale
+              const color = chroma.scale("Spectral")(normalizedResult).css();
+              colorDiv.style.backgroundColor = color;
+
+              // Display the confidence score inside the colorDiv
+              // Here we're converting it to a percentage and rounding to 2 decimal places
+              const confidenceScoreText = `${(normalizedResult * 100).toFixed(
+                2
+              )}%`;
+              colorDiv.textContent = confidenceScoreText;
+              // Styling the text for better visibility
+
+              colorDiv.style.color = "white";
+              colorDiv.style.fontSize = "0.8em";
+              colorDiv.style.textAlign = "center";
+              colorDiv.style.display = "flex";
+              colorDiv.style.textShadow = "2px 1px 1px black";
+
+              colorDiv.style.justifyContent = "center";
+              colorDiv.style.alignItems = "center";
+
+              box.appendChild(colorDiv);
+
+              const timestampDiv = document.createElement("div");
+              timestampDiv.style.height = "33%";
+
+              const readableTimestamp = formatTimestamp(result.Timestamp);
+              timestampDiv.textContent = `${readableTimestamp}`;
+              timestampDiv.style.fontSize = "0.8em";
+              box.appendChild(timestampDiv);
+
+              container.appendChild(box);
+            });
+          })
+          .catch((error) =>
+            console.error("Error fetching author results:", error)
+          );
+      }
+
+      */
+    </script>
+  </body>
+</html>

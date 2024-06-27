@@ -1,0 +1,143 @@
+        body {
+            font-family: sans-serif;
+            background-image: url('https://scontent.fdub7-1.fna.fbcdn.net/v/t39.30808-6/419974143_870889971499281_8376490294510433810_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=V7igMpnDg6YAX-Ywmtj&_nc_ht=scontent.fdub7-1.fna&oh=00_AfD8qo1PKwaAf2c_F3RtQK24CW2YSxtR4LOut31iZlqzRw&oe=66058438');
+            background-size: contain;;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            padding-top: 50px; /* Height of the header */
+
+        }
+        .center-div {
+            width: 500px; /* Adjust the width as needed */
+            max-width: 100%; /* Ensures responsiveness */
+            margin: 0 auto; /* Centers the div horizontally */
+            max-height: 750px; /* Maximum height before becoming scrollable */
+            overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .slim-div {
+            width: 500px; /* Adjust the width as needed */
+            max-width: 100%; /* Ensures responsiveness */
+            height: auto;
+            margin: 0 auto; /* Centers the div horizontally */
+            max-height: 750px; /* Maximum height before becoming scrollable */
+          /*  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+            background-color: #fff;
+            padding: 0px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .ndiv {
+            width: 400px; /* Ensure consistency or adjust as needed */
+            max-width: 100%; /* Ensures responsiveness */
+            overflow-y: auto; /* Show vertical scrollbar when content overflows */
+
+            margin: 0 auto; /* Centers the div horizontally */
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            text-align: bottom;
+        }
+        input[type="text"] {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            width: calc(100% - 24px);
+            margin-bottom: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            font-size: 13px;
+        }   
+        #result-p{
+            font-size: 12px;
+        }
+
+        /* Style for the header container */
+        header {
+            background-color: #f8f9fa; /* A light grey background */
+            position: fixed;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            top: 0;
+            left: 0;
+            z-index: 100; /* Ensure it stays on top of other content */
+            height: 50px; /* New height of the header */
+
+        }
+
+        /* Style for the header content */
+        .header-content {
+            width: 90%;
+            max-width: 1140px; /* Max width for large screens */
+            margin: 0 auto; /* Centering the content */
+            padding: 3px 1rem; /* Adjusted padding for vertical alignment */
+
+            display: flex; /* Using flexbox for layout */
+            justify-content: space-between; /* Space between title and nav */
+            align-items: center; /* Center items vertically */
+        }
+
+        /* Style for the navigation */
+        nav ul {
+            list-style: none; /* Remove default list styling */
+            padding: 0;
+            margin: 0;
+            display: flex; /* Display nav items inline */
+        }
+
+        nav ul li {
+            margin-left: 20px; /* Space between nav items */
+        }
+
+        nav ul li a {
+            text-decoration: none; /* Remove underline from links */
+            color: #333; /* Dark text for contrast */
+            font-size: 16px; /* Slightly larger font size for readability */
+            transition: color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        nav ul li a:hover {
+            color: #007bff; /* Change color on hover */
+        }
+
+        @media (max-width: 768px) {
+            header {
+                height: 100px; /* Smaller height for mobile */
+            }
+        
+            .body {
+                padding-top: 100px; /* Match the header height for mobile */
+            }
+        }
+        .verifyme-text {
+            color: rgb(0,60,179);
+        }
+        
