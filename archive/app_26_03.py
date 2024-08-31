@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify, request, render_template, url_for, abort, current_app, session
 from werkzeug.utils import secure_filename
 
-from embedding import get_stylometric_embedding  # Custom import from your project
+from embedding import get_stylometric_embedding  
 
 
 app = Flask(__name__)
@@ -12,11 +12,9 @@ app = Flask(__name__)
 
 # HTML template for the form, with updated styles
 
-#            background-color: #f0f0f0;
-
 
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')  # Use a directory named 'uploads' in the current working directory
-# Ensure the upload directory exists
+
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
@@ -44,7 +42,7 @@ def append_embedding():
 
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], csv_filename)
 
-    # Open the CSV file in append mode ('a') and write the new data
+
     try:
         with open(file_path, 'a', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
@@ -56,17 +54,17 @@ def append_embedding():
 
 @app.route('/append', methods=['POST'])
 def append_to_csv():
-    # Assuming JSON input with 'name' and 'age' fields
+
     data = request.json
     file_path = 'data.csv'
     
-    # Check if the file exists. If not, create it and write the header
+
     if not os.path.exists(file_path):
         with open(file_path, mode='w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=['name', 'age'])
             writer.writeheader()
     
-    # Open the file in append mode and write the new row
+
     with open(file_path, mode='a', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=['name', 'age'])
         writer.writerow({'name': data['name'], 'age': data['age']})
@@ -118,10 +116,12 @@ def get_author_ids():
             columns = list(zip(*rows))
 
             for item in columns[1]:
-                author_ids.add(item)  # Assuming the author_id is in the second column
+                author_ids.add(item)  
+                
 
         except FileNotFoundError:
-            pass  # If the file doesn't exist, just return an empty set
+            pass  
+        
         print(author_ids)
         return list(author_ids)
 
@@ -167,7 +167,6 @@ def upload_csv():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
-    # Optionally, process the CSV file here or just save its path for later processing
     return jsonify({'message': 'File uploaded successfully', 'filename': filename})
 
 
@@ -179,7 +178,7 @@ def list_csv_files():
 @app.route('/select_csv', methods=['POST'])
 def select_csv():
     selected_csv = request.form['existingCsvFiles']
-    session['selected_csv'] = select_csv  #Storing the selected filename in the session
+    session['selected_csv'] = select_csv  
     return f'The selected CSV is {selected_csv}'
 
 

@@ -10,11 +10,11 @@
 body {
   font-family: "Inter", sans-serif;
   background-color: #212121;
-  /*    background-image: url('OAI.jpg');*/
+  
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+  overflow-y: auto; 
 
   margin: 0;
   padding: 0;
@@ -22,7 +22,7 @@ body {
   height: 100%;
 
   display: flex;
-  flex-direction: column; /* Stack content vertically */
+  flex-direction: column; 
   justify-content: center;
 
   align-items: center;
@@ -30,18 +30,18 @@ body {
 }
 
 select {
-  font-family: "Inter", sans-serif; /* Ensures dropdown matches page font */
-  font-size: 16px; /* Adjust as needed */
-  padding: 8px; /* Adjust as needed */
-  border-radius: 4px; /* Optional: Rounds the corners of the dropdown */
-  border: 1px solid #ddd; /* Optional: Adds a light border to the dropdown */
+  font-family: "Inter", sans-serif; 
+  font-size: 16px; 
+  padding: 8px; 
+  border-radius: 4px; 
+  border: 1px solid #ddd; 
 }
 
 .center-div {
-  width: 850px; /* Adjust the width as needed */
-  max-width: 100%; /* Ensures responsiveness */
-  margin: 0 auto; /* Centers the div horizontally */
-  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+  width: 850px; 
+  max-width: 100%; 
+  margin: 0 auto; 
+  overflow-y: auto; 
 
   background-color: #fff;
   padding: 25px;
@@ -55,11 +55,11 @@ select {
   text-align: center;
 }
 .center2-div {
-  width: 800px; /* Adjust the width as needed */
-  max-width: 90%; /* Ensures responsiveness */
-  margin: 0 auto; /* Centers the div horizontally */
-  max-height: 1000px; /* Maximum height before becoming scrollable */
-  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+  width: 800px; 
+  max-width: 90%; 
+  margin: 0 auto; 
+  max-height: 1000px; 
+  overflow-y: auto; 
 
   background-color: #fff;
   padding: 25px;
@@ -69,7 +69,7 @@ select {
 }
 .pre2 {
   unicode-bidi: embed;
-  /* font-family: monospace;   */
+  
   white-space: pre;
   font-size: 15px;
 
@@ -81,15 +81,15 @@ pre {
   font-size: 16px;
 }
 .slim-div {
-  width: 900px; /* Adjust the width as needed */
-  max-width: 100%; /* Ensures responsiveness */
+  width: 900px; 
+  max-width: 100%; 
   height: auto;
-  z-index: 9000; /* Ensure it stays on top of other content */
-  display: flex; /* Using flexbox for layout */
+  z-index: 9000; 
+  display: flex; 
 
-  margin: 0 auto; /* Centers the div horizontally */
-  max-height: 750px; /* Maximum height before becoming scrollable */
-  /*  overflow-y: auto; /* Show vertical scrollbar when content overflows */
+  margin: 0 auto; 
+  max-height: 750px; 
+  
   background-color: #fff;
   padding: 5px;
   border-radius: 8px;
@@ -118,20 +118,20 @@ input[type="text"] {
 }
 
 textarea {
-  width: 100%; /* Adjust as needed */
+  width: 100%; 
   padding: 10px;
   box-sizing: border-box;
-  font-size: 17px; /* Adjust as needed */
+  font-size: 17px; 
   font-family: "Inter", sans-serif;
 
-  border: 1px solid #ccc; /* Style as per your input field */
-  border-radius: 4px; /* Style as per your input field */
-  resize: vertical; /* Allow vertical resizing only */
-  max-height: 300px; /* Set your desired maximum height here */
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  resize: vertical; 
+  max-height: 300px; 
 }
 
 input[type="submit"] {
-  background-color: #007bff; /*#007BFF */
+  background-color: #007bff; 
   color: #ffffff;
   border: none;
   padding: 8px 20px;
@@ -151,9 +151,9 @@ input[type="submit2"] {
   border-radius: 40px;
   cursor: pointer;
   font-size: 15px;
-  display: block; /* Make the input display as block */
-  margin: 0 auto; /* Auto margin on both sides to center */
-  text-align: center; /* Center text inside the button */
+  display: block; 
+  margin: 0 auto; 
+  text-align: center; 
 }
 
 input[type="submit2"]:hover {
@@ -165,105 +165,105 @@ input[type="submit2"]:hover {
 
 #submit3 {
   cursor: pointer;
-  padding: 8px 10px; /* Consistent padding */
-  border: 2px solid #007bff; /* Blue border */
+  padding: 8px 10px; 
+  border: 2px solid #007bff; 
   border-radius: 50px;
-  background-color: transparent; /* Transparent background initially */
-  font-size: 14px; /* Uniform font size */
+  background-color: transparent; 
+  font-size: 14px; 
   color: #007bff;
   margin-bottom: 10px;
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+  transition: background-color 0.3s, color 0.3s; 
 }
 
 #submit3:hover,
 #submit3:active {
-  background-color: #007bff; /* Blue background */
-  color: #ffffff; /* White text color */
+  background-color: #007bff; 
+  color: #ffffff; 
   border-color: transparent;
 }
 
 #submit3:focus {
-  outline: none; /* Remove focus outline */
+  outline: none; 
 }
 
 
 
 
 
-/* Ensure the parent div uses flexbox to align items (if applicable) */
+
 .parent-divn {
   display: flex;
-  justify-content: center; /* Center children horizontally */
-  align-items: center; /* Center children vertically */
+  justify-content: center; 
+  align-items: center; 
 }
 
 .results-container {
   transition: height 0.5s ease-out;
-  overflow: hidden; /* Hide overflow during transition */
+  overflow: hidden; 
 }
 
 #result-p {
   font-size: 14px;
 }
 
-/* Style for the header container */
+
 header {
-  background-color: #ffffff; /* A light grey background */
-  /*     box-shadow: 0px 0px 250px rgb(255, 255, 255); /* Subtle shadow for depth */
+  background-color: #ffffff; 
+  
   width: 100%;
-  height: 65px; /* New height of the header */
+  height: 65px; 
 }
 
-/* Style for the header content */
+
 .header-content {
   width: 57%;
-  max-width: 1140px; /* Max width for large screens */
-  margin: 0 auto; /* Centering the content */
-  padding: 20px 1rem; /* Adjusted padding for vertical alignment */
+  max-width: 1140px; 
+  margin: 0 auto; 
+  padding: 20px 1rem; 
   font-size: 22px;
-  display: flex; /* Using flexbox for layout */
-  justify-content: space-between; /* Space between title and nav */
-  align-items: center; /* Center items vertically */
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
 }
 
 footer {
-  background-color: #ffffff; /* A light grey background */
+  background-color: #ffffff; 
   width: 100%;
-  height: 60px; /* New height of the header */
+  height: 60px; 
 }
 
-/* Style for the header content */
+
 .footer-content {
   width: 100%;
-  max-width: 1140px; /* Max width for large screens */
-  margin: 0 auto; /* Centering the content */
-  padding: 27px 1rem; /* Adjusted padding for vertical alignment */
+  max-width: 1140px; 
+  margin: 0 auto; 
+  padding: 27px 1rem; 
   font-size: 22px;
 
-  align-items: center; /* Center items vertically */
+  align-items: center; 
   text-align: center;
 }
 
-/* Style for the navigation */
+
 nav ul {
-  list-style: none; /* Remove default list styling */
+  list-style: none; 
   padding: 0;
   margin: 0;
 }
 
 nav ul li {
-  margin-left: 20px; /* Space between nav items */
+  margin-left: 20px; 
 }
 
 nav ul li a {
-  text-decoration: none; /* Remove underline from links */
-  color: #333; /* Dark text for contrast */
-  font-size: 20px; /* Slightly larger font size for readability */
-  transition: color 0.3s; /* Smooth transition for hover effect */
+  text-decoration: none; 
+  color: #333; 
+  font-size: 20px; 
+  transition: color 0.3s; 
 }
 
 nav ul li a:hover {
-  color: #007bff; /* Change color on hover */
+  color: #007bff; 
 }
 
 .verifyme-text {
@@ -275,7 +275,7 @@ nav ul li a:hover {
   grid-template-columns: repeat(
     auto-fill,
     minmax(150px, 1fr)
-  ); /* Adjust based on your preference */
+  ); 
   gap: 10px;
 }
 
@@ -285,32 +285,32 @@ nav ul li a:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 50px;
-  overflow: hidden; /* Ensure contents don't overflow the border-radius */
+  overflow: hidden; 
 }
 
 .result-box > div {
   display: flex;
-  align-items: center; /* Center text vertically */
-  justify-content: center; /* Center text horizontally */
+  align-items: center; 
+  justify-content: center; 
   width: 100%;
 }
 
 .result-box > div:nth-child(1) {
-  flex-grow: 2; /* Allocate more space to the color div */
+  flex-grow: 2; 
 }
 
 .result-box > div:nth-child(2) {
-  flex-grow: 1; /* Less space for the timestamp div */
-  background-color: #f0f0f0; /* Light background for the timestamp */
+  flex-grow: 1; 
+  background-color: #f0f0f0; 
 }
 
 .a2,
 .Footer_Footer__link__QcW_T {
-  display: inline-block; /* This will make the span and a tag as wide as its content */
-  position: relative; /* Needed for the absolute positioning of the pseudo-element to work correctly */
-  text-decoration: none; /* Removes underline from links */
-  color: #000000; /* Sets the text color to black */
-  font-size: 15px; /* Sets the font size */
+  display: inline-block; 
+  position: relative; 
+  text-decoration: none; 
+  color: #000000; 
+  font-size: 15px; 
 }
 
 .Footer_Footer__link__QcW_T:after {
@@ -318,9 +318,9 @@ nav ul li a:hover {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -2px; /* Adjust this value to move the line closer or further from the text */
+  bottom: -2px; 
   height: 2px;
-  background-color: #000000; /* Line color */
+  background-color: #000000; 
 
   transform: scaleX(1);
   transform-origin: left;
@@ -339,15 +339,15 @@ a {
 
 .a2 {
   text-decoration: none;
-  color: #000000; /* This sets the text color to black */
+  color: #000000; 
   font-size: 15px;
-  display: inline-block; /* Allows the link to shrink/grow with its content */
+  display: inline-block; 
 }
 
 #modelConfidenceContainer {
   width: 100%;
-  max-width: 600px; /* Adjust based on your layout */
-  height: 15px; /* Height of the slider */
+  max-width: 600px; 
+  height: 15px; 
   position: relative;
   margin: 20px auto;
   color: #ffffff;
@@ -380,9 +380,9 @@ a {
   transform: translateY(-50%);
 }
 
-/* Cube Animation Styles */
+
 .cube {
-  margin: 20px auto; /* Adjusted for better positioning */
+  margin: 20px auto; 
   font-size: 24px;
   height: 1em;
   width: 1em;
@@ -453,36 +453,36 @@ a {
     transform: translatez(0.5em);
   }
 }
-/* Tooltip container */
+
 .tooltip {
   position: relative;
   display: inline-block;
-  cursor: pointer; /* Optional: Changes the cursor on hover */
+  cursor: pointer; 
 }
 
-/* Tooltip text */
+
 .tooltip .tooltiptext {
   visibility: hidden;
 
   width: 120px;
-  background-color: #f8f9fa; /* Light background for the tooltip */
-  color: #333; /* Dark text color for readability */
+  background-color: #f8f9fa; 
+  color: #333; 
   text-align: center;
   padding: 8px 0px;
   border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 
-  /* Position the tooltip text */
+  
   position: absolute;
   z-index: 1;
   bottom: 66.6%;
   left: 50%;
-  transform: translateX(-50%) scale(0); /* Start scaled down and centered */
+  transform: translateX(-50%) scale(0); 
   transition: visibility 0.05s, opacity 0.05s ease-in-out, transform 0.1s ease;
-  transition-delay: 0s, 0s, 0.2s; /* Delay the transform transition */
+  transition-delay: 0s, 0s, 0.2s; 
 }
 
-/* Tooltip arrow */
+
 .tooltip .tooltiptext::after {
   content: "";
   position: absolute;
@@ -494,21 +494,21 @@ a {
   border-color: #f8f9fa transparent transparent transparent;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
+
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
   display: inline-block;
 
-  transform: translateX(-50%) scale(1); /* Scale to normal size */
-  transition-delay: 0s, 0s, 0s; /* Reset transition delay */
+  transform: translateX(-50%) scale(1); 
+  transition-delay: 0s, 0s, 0s; 
 }
 
 .spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Or a specific height */
+  height: 100%; 
 }
 
 .spinner {
@@ -516,7 +516,7 @@ a {
   z-index: 1000;
   height: 35px;
   width: 35px;
-  /* No need for transform here */
+  
 }
 
 [class^="ball-"] {
@@ -588,12 +588,12 @@ a {
   transform: translate(-50%, -50%);
   color: black;
   cursor: pointer;
-  display: none; /* Initially hidden */
-  font-size: 20px; /* Adjust based on your box size */
+  display: none; 
+  font-size: 20px; 
 }
 
 .edit-mode .result-delete-icon {
-  display: block; /* Show only in edit mode */
+  display: block; 
 }
 
 .tooltip {
@@ -604,7 +604,7 @@ a {
   align-items: center;
   justify-content: center;
   position: relative;
-  /* Ensure background color is set here or in a manner that dynamically applies based on another class or inline style */
+  
 }
 
 .modal {
@@ -640,99 +640,99 @@ a {
 }
 
 .selected {
-  border: 3px solid #fff; /* Highlight selection */
-  /* Do not alter other properties that might change the box's appearance */
+  border: 3px solid #fff; 
+  
 }
 
-/* Updated .selected class */
+
 .selected::after {
-  content: "✕"; /* Using a cross symbol as indicator */
-  color: #fff; /* White color for contrast */
+  content: "✕"; 
+  color: #fff; 
   position: absolute;
   top: 50%;
   left: 50%;
 
   transform: translate(-50%, -50%);
-  font-size: 20px; /* Size of the cross */
-  /* Ensure this does not alter the box's original appearance */
+  font-size: 20px; 
+  
 }
 
 .selectedEmb {
-  border: 3px solid #ffffff; /* Highlight selection */
-  /* Do not alter other properties that might change the box's appearance */
+  border: 3px solid #ffffff; 
+  
 }
 .selectedEmb::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%; /* Adjust vertically to center the bar within the element */
-  height: 2px; /* Thickness of the bar */
-  background-color: #000; /* Color of the bar, change as needed */
-  transform: translateY(-50%); /* Ensure the bar is centered vertically */
+  top: 50%; 
+  height: 2px; 
+  background-color: #000; 
+  transform: translateY(-50%); 
 }
 
-/* Base style for both Edit and Delete Selected buttons */
+
 .button-common {
-  background-color: transparent; /* Transparent background initially */
-  padding: 3px 10px; /* Consistent padding */
-  border-radius: 40px; /* Rounded corners */
-  cursor: pointer; /* Indicates clickability */
-  font-size: 15px; /* Uniform font size */
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+  background-color: transparent; 
+  padding: 3px 10px; 
+  border-radius: 40px; 
+  cursor: pointer; 
+  font-size: 15px; 
+  transition: background-color 0.3s, color 0.3s; 
 }
 
-/* Specific style for Edit button (assume you add class .edit-btn to the Edit button) */
+
 .edit-btn {
-  color: #007bff; /* Blue text color */
-  border: 2px solid #007bff; /* Blue border */
+  color: #007bff; 
+  border: 2px solid #007bff; 
 }
 
 .edit-btn.clicked,
 .edit-btn:hover {
-  background-color: #007bff; /* Blue background on hover/click */
-  color: #ffffff; /* White text color on hover/click */
+  background-color: #007bff; 
+  color: #ffffff; 
 }
 
-/* Specific style for Delete Selected button */
+
 #deleteSelected {
-  color: #ff8484; /* Soft red color indicating delete action */
-  border: 2px solid #ff8484; /* Matching border color */
+  color: #ff8484; 
+  border: 2px solid #ff8484; 
 }
 
 #deleteSelected.clicked,
 #deleteSelected:hover {
-  background-color: #ff8484; /* Red background on hover/click */
-  color: #ffffff; /* White text color on hover/click */
+  background-color: #ff8484; 
+  color: #ffffff; 
 }
 
-/* Specific style for Edit button (assume you add class .edit-btn to the Edit button) */
+
 .edit-btnEmb {
-  color: #007bff; /* Blue text color */
-  border: 2px solid #007bff; /* Blue border */
+  color: #007bff; 
+  border: 2px solid #007bff; 
 }
 
 .edit-btnEmb.clicked,
 .edit-btnEmb:hover {
-  background-color: #007bff; /* Blue background on hover/click */
-  color: #ffffff; /* White text color on hover/click */
+  background-color: #007bff; 
+  color: #ffffff; 
 }
 
-/* Specific style for Delete Selected button */
+
 #deleteSelectedEmb {
-  color: #ff8484; /* Soft red color indicating delete action */
-  border: 2px solid #ff8484; /* Matching border color */
+  color: #ff8484; 
+  border: 2px solid #ff8484; 
 }
 
 #deleteSelectedEmb.clicked,
 #deleteSelectedEmb:hover {
-  background-color: #ff8484; /* Red background on hover/click */
-  color: #ffffff; /* White text color on hover/click */
+  background-color: #ff8484; 
+  color: #ffffff; 
 }
 
 .custom-modal {
   position: fixed;
-  z-index: 1000; /* Ensuring it's on top */
+  z-index: 1000; 
   left: 0;
   top: 0;
   width: 100%;
@@ -740,20 +740,20 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent backdrop */
-  padding-top: 5%; /* Adding padding to the top to push the content down */
+  background-color: rgba(0, 0, 0, 0.3); 
+  padding-top: 5%; 
 }
 
 .custom-modal-content {
-  background-color: var(--light-cyan); /* Light and fresh background */
+  background-color: var(--light-cyan); 
   margin: auto;
   padding: 20px;
-  border-radius: 8px; /* Softened edges */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   width: 80%;
-  max-width: 450px; /* Capped for larger screens */
-  color: var(--russian-violet); /* Rich text color for contrast */
-  font-family: "Inter", sans-serif; /* Consistent typography */
+  max-width: 450px; 
+  color: var(--russian-violet); 
+  font-family: "Inter", sans-serif; 
 }
 
 .strikethrough {
@@ -761,20 +761,20 @@ a {
 }
 
 .custom-modal-close {
-  color: var(--french-blue); /* Pleasant, clickable color */
+  color: var(--french-blue); 
   position: absolute;
   right: 15px;
   top: 10px;
-  font-size: 24px; /* Slightly reduced for elegance */
+  font-size: 24px; 
   cursor: pointer;
 }
 
 .custom-modal-close:hover,
 .custom-modal-close:focus {
-  color: var(--light-coral); /* Highlight indicating actionability */
+  color: var(--light-coral); 
 }
 
-/* Additional styles for buttons and links inside the modal */
+
 .custom-modal button,
 .custom-modal a {
   background-color: var(--medium-turquoise);
@@ -782,10 +782,10 @@ a {
   border: none;
   padding: 10px 20px;
   border-radius: 25px;
-  text-decoration: none; /* For anchor tags */
-  display: inline-block; /* For anchor tags to behave like buttons */
-  margin: 5px; /* Spacing around buttons */
-  cursor: pointer; /* Indicating clickability */
+  text-decoration: none; 
+  display: inline-block; 
+  margin: 5px; 
+  cursor: pointer; 
 }
 
 .custom-modal button:hover,
@@ -795,19 +795,19 @@ a {
 
 #toggleEmbeddingsList {
   cursor: pointer;
-  padding: 3px 10px; /* Consistent padding */
+  padding: 3px 10px; 
   border: none;
   border-radius: 50px;
-  background-color: transparent; /* Transparent background initially */
-  border: 2px solid #007bff; /* Blue border */
-  font-size: 15px; /* Uniform font size */
+  background-color: transparent; 
+  border: 2px solid #007bff; 
+  font-size: 15px; 
 
   color: #007bff;
   margin-bottom: 10px;
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for visual feedback */
+  transition: background-color 0.3s, color 0.3s; 
 }
 #toggleEmbeddingsList.clicked,
 #toggleEmbeddingsList:hover {
-  background-color: #007bff; /* Blue background on hover/click */
-  color: #ffffff; /* White text color on hover/click */
+  background-color: #007bff; 
+  color: #ffffff; 
 }

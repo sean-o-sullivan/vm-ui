@@ -10,6 +10,8 @@
     />
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.1.0/chroma.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
   </head>
   <body>
     <header>
@@ -21,7 +23,7 @@
         <nav>
           <ul>
             <li><a href="{{ url_for('about') }}">About</a></li>
-            <!-- Add more navigation links as needed -->
+            
           </ul>
         </nav>
       </div>
@@ -42,14 +44,14 @@
 
             <div id="saveTestContainer">
 
-              <p>we recommend samples upwards of 500 words</p> <p style="font-size: 20x" id="result-p"></p>
+              <p>we recommend samples upwards of 1000 words</p> <p style="font-size: 20x" id="result-p"></p>
             </div>
 
 
               <textarea id="texts" name="mytext" placeholder="Enter Text Here" required></textarea>
                 <div id="saveTestContainer">
                 <pre id="word">Word count: 0</pre>
-                <!--required-->
+                
                 <button id="submit3" type="button" onclick="clearText()">Clear Text</button>
                 </div>
             </form>
@@ -74,7 +76,7 @@
           <div id="authorSelection">
             <select id="existingAuthorIds" oninput="clearNewAuthorId()">
               <option value="">Select an Author ID</option>
-              <!-- Dynamically populated options -->
+              
             </select>
 
             <a><span> --- or --- </span></a>
@@ -93,7 +95,7 @@
           </div>
           <pre id="result-numtexts"></pre>
 
-          <!--  <select id="existingAuthorIds" oninput="clearNewAuthorId()">
+          
                     <option value="">Select Context Size</option>
                 </select>                  -->
 
@@ -105,9 +107,9 @@
                       <p style="font-size: 18px">
                       <b>Manage Writing Samples</b> <i>(Optional)</i>
                       </p>
-                      <!--<button id="toggleEmbeddingsList">Show Embeddings</button> -->
+                      
 
-                      <!-- Edit button -->
+                      
                       <button
                         id="embeddingediting"
                         class="button-common edit-btnEmb"
@@ -116,7 +118,7 @@
                         Edit
                       </button>
       
-                      <!-- Delete Selected button (initially hidden) -->
+                      
                       <button
                         id="deleteSelectedEmb"
                         class="button-common"
@@ -137,10 +139,10 @@
                     
                     <div id="saveTestContainer2">
 
-                    <input
+                      <input
                       type="submit"
                       value="Save Sample"
-                      onclick="appendEmbedding() "
+                      onclick="console.log('Save Sample button clicked'); appendEmbedding();"
                       readonly
                     />
                     <input
@@ -160,7 +162,7 @@
                   <div id="appendSuccessMessage" ></div>
 
                   </div>
-                  <!-- Add a new form for CSV file path and authorID -->
+                  
                 
         </div>
         <div class="right_centre">
@@ -178,19 +180,23 @@
 
           <br />
           <div class="center2-div">
+
+            <div class="flex-container3">
+            <div class="content">
+
             <p><b>Analysis results</b></p>
 
-            <!--  <div class="contentresults">-->
+            
             <pre>Test ID:<b> <span id="test_id"> &#x25A0;</span> </b> &emsp;Author ID:<b> <span id="author_identifier"> &#x25A0;</span></b></pre>
 
-            <!--graph the 58 values in the 3 samples and compare to the queried sample - matplotlib!-->
+            
 
-            <!-- Modified container for Model Confidence and Loader -->
+            
             <div class="results-container">
-              <pre>Model Confidence:<b> <span id="results_analysis"> &#x25A0;</span></b></pre>
-              <!-- Cube Loader, initially visible for demonstration -->
+              <pre>Same Author: <b><span id="results_analysis_same_author"> &#x25A0;</span></b></pre>
+              <pre>Distance: <b><span id="results_analysis_distance"> &#x25A0;</span></b></pre>
             </div>
-            <!--   </div>-->
+            
 
             <div id="cube-loader" class="cube" style="display: none">
               <div class="side"></div>
@@ -201,6 +207,17 @@
               <div class="side"></div>
             </div>
 
+          </div>
+
+
+              <div class="plotter">
+                <div id="scatter_plot"></div>
+              </div>
+
+            </div>
+
+
+
             <div id="modelConfidenceContainer">
               <div id="modelConfidenceScale" class="confidence-scale"></div>
               <div
@@ -208,7 +225,7 @@
                 class="confidence-indicator"
               ></div>
             </div>
-            <!-- Custom Alert Modal -->
+            
             <div
               id="customAlertModal"
               class="custom-modal"
@@ -252,13 +269,13 @@
             >
               <p><b>Previous similarity tests</b></p>
 
-              <!-- Edit button -->
+              
               <button class="button-common edit-btn"                  style="display: none"
                onclick="toggleEditMode()">
                 Edit
               </button>
 
-              <!-- Delete Selected button (initially hidden) -->
+              
               <button
                 id="deleteSelected"
                 class="button-common"
@@ -276,7 +293,7 @@
           </div>
 <br>
           <div id="saveResult2">
-            <!--save authorID, confidence, timestamp-->
+            
             <div id="saveTestContainer">
             <a><h2>4. Save test result</h2></a>
             <input
@@ -290,7 +307,7 @@
 
           <br />
           <div id="appendSuccessResultMessage"></div>
-          <!-- Placeholder for success message -->
+          
           
           <br>
           <br>
@@ -301,7 +318,7 @@
           onclick="clearFormAndResult()"
           readonly
         />
-          <!-- Placeholder for success message -->
+          
         </div>
       </div>
     </div>
@@ -322,6 +339,23 @@
     </footer>
 
     <script>
+
+
+
+function fetchPlotData() {
+            fetch('/update_plot')
+                .then(response => response.json())
+                .then(data => {
+                    var scatterPlot = JSON.parse(data);
+                    var config = { responsive: true };  // Make the plot responsive
+                    Plotly.newPlot('scatter_plot', scatterPlot.data, scatterPlot.layout, config);
+                });
+        }
+
+
+
+
+
 
 const textarea = document.getElementById("texts");
 
@@ -523,95 +557,86 @@ area.addEventListener("input", function () {
         closeCustomConfirmModal(); // Close the modal
       }
 
-      function appendEmbedding() {        
 
-        const testName = document.getElementById("newAuthorId2").value.trim()
-          ? document.getElementById("newAuthorId2").value
-          : " ";
 
-        const newAuthorId = document.getElementById("newAuthorId").value.trim();
-        const existingAuthorId =
-          document.getElementById("existingAuthorIds").value;
-        const authorId = newAuthorId || existingAuthorId; // Use newAuthorId if available; otherwise, use existingAuthorId.
-        const embedding = document.getElementById("result-p").textContent;
 
-        //   const aeee = document.getElementById("results_analysis").textContent;
 
-        // console.log("the text content is: " + aeee);
-        const resultScore = parseFloat(
-          document.getElementById("results_analysis").textContent
-        );
 
-        // Define the threshold for the discrepancy
-        const discrepancyThreshold = 0.5;
 
-        // Check if the last recorded score is below the threshold
-        if (resultScore < discrepancyThreshold) {
-          // Display an error message to the user
-          showCustomAlert(
-            "Error: The discrepancy in the recorded score is too large to save the embedding. Please review the results."
-          );
-          return; // Stop the function
+
+      function appendEmbedding() {
+    console.log("appendEmbedding function called");
+
+    const testName = document.getElementById("newAuthorId2").value.trim()
+        ? document.getElementById("newAuthorId2").value
+        : " ";
+    console.log("Test Name:", testName);
+
+    const newAuthorId = document.getElementById("newAuthorId").value.trim();
+    const existingAuthorId = document.getElementById("existingAuthorIds").value;
+    const authorId = newAuthorId || existingAuthorId;
+    console.log("Author ID:", authorId);
+
+    let embedding = document.getElementById("result-p").textContent;
+    console.log("Embedding:", embedding);
+
+    // Try to parse the embedding if it's a JSON string
+    try {
+        const parsedEmbedding = JSON.parse(embedding);
+        if (parsedEmbedding.embedding && Array.isArray(parsedEmbedding.embedding)) {
+            embedding = parsedEmbedding.embedding.join(',');
+        } else {
+            throw new Error("Invalid embedding format");
         }
+    } catch (error) {
+        console.error("Error parsing embedding:", error);
+        showCustomAlert("Invalid embedding format. Please generate a new embedding.");
+        return;
+    }
 
-        // Check if embedding and authorId are available
-        if (!embedding || embedding === "" || !authorId) {
-          showCustomAlert(
-            "Please generate an embedding and select or enter an Author ID."
-          );
-          return;
+    console.log("Preparing to send request to /append");
+    console.log("Request payload:", { authorId, testName, embedding });
+
+    fetch("/append", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ authorId, testName, embedding }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Server responded with status: " + response.status);
         }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Received data:", data);
+        let successMessageElement = document.getElementById("appendSuccessMessage");
+        successMessageElement.style.color = "green";
+        successMessageElement.innerHTML = "Embedding appended successfully!";
+        fetchAndDisplayEmbeddings(authorId);
+        document.getElementById("newAuthorId2").value = "";
+        document.getElementById("newAuthorId").value = ""; // Clear the new Author ID field
 
-    
+        document.getElementById("newAuthorId2").style.color = "#959595";
 
-        fetch("/append", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ authorId, testName, embedding }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              // Server responded with an error status
-              throw new Error(
-                "Server responded with an error: " + response.statusText
-              );
-            }
-            return response.json();
-          })
-          .then((data) => {
-            //document.getElementById('saveResult').textContent = data.message;
-            console.log(document.getElementById("appendSuccessMessage"));
-            let successMessageElement = document.getElementById(
-              "appendSuccessMessage"
-            );
-            successMessageElement.style.color = "green";
-            successMessageElement.innerHTML =
-              "Embedding appended successfully!";
-            fetchAndDisplayEmbeddings(authorId);
-            //clearFormAndResult();
-            document.getElementById("newAuthorId2").value = "";
-document.getElementById("newAuthorId2").style.color = "#959595";
+                // Refresh the author list after embedding is appended
+        fetchAuthorIds();
+
+        setTimeout(() => {
+            successMessageElement.textContent = "";
+        }, 2000);
+    })
+    .catch(error => {
+        console.error("Error in appendEmbedding:", error);
+        let successMessageElement = document.getElementById("appendSuccessMessage");
+        successMessageElement.style.color = "red";
+        successMessageElement.innerHTML = "Error: " + error.message;
+    });
+}
 
 
 
 
-            // Set a timeout to clear the success message after 1 second (1000 milliseconds)
-            setTimeout(() => {
-              successMessageElement.textContent = ""; // Clear the message
-            }, 2000); // Time delay of 1 second
-          })
-          .catch((error) => {
-            console.error("Caught the following error:", error);
-            //document.getElementById('saveResult').textContent = 'Error Caught During Embedding Appending.';
-
-            let successMessageElement = document.getElementById(
-              "appendSuccessMessage"
-            );
-            successMessageElement.style.color = "red";
-            successMessageElement.innerHTML =
-              "Error Caught During Embedding Appending.";
-          });
-      }
 
       // Function fetchAuthorIds remains largely the same, but ensure it works with the newly uploaded file
       function fetchAuthorIds() {
@@ -691,97 +716,89 @@ document.getElementById("newAuthorId2").style.color = "#959595";
         indicator.style.left = `${position}px`;
       }
 
-      function predictAuthorship() {
-        // Retrieve the author ID and the embedding content
 
-        document.getElementById("results_analysis").textContent =
-              "\u25A0";
 
-        const existingAuthorId =
-          document.getElementById("existingAuthorIds").value;
-        const newAuthorId = document.getElementById("newAuthorId").value.trim();
-        const embeddingContent =
-          document.getElementById("result-p").textContent;
 
-        // Check if neither an author ID has been selected nor an embedding has been generated
-        if (
-          !existingAuthorId &&
-          !newAuthorId &&
-          (!embeddingContent || embeddingContent === "")
-        ) {
-          showCustomAlert(
-            "Please select or enter an Author ID and generate an embedding before analyzing."
-          );
-          return; // Stop the function from proceeding further
-        }
 
-        // Check if an author ID has been selected
-        if (!existingAuthorId && !newAuthorId) {
-          showCustomAlert("Please select or enter an Author ID.");
-          return; // Stop the function from proceeding further
-        }
+  function predictAuthorship() {
+  // Retrieve the author ID and the embedding content
+  const existingAuthorId = document.getElementById("existingAuthorIds").value;
+  const newAuthorId = document.getElementById("newAuthorId").value.trim();
+  const embeddingContent = document.getElementById("result-p").textContent;
 
-        // Check if an embedding has been generated
-        if (!embeddingContent || embeddingContent === "") {
-          showCustomAlert("Please generate an embedding before analyzing.");
-          return; // Stop the function from proceeding further
-        }
+  // Check if neither an author ID has been selected nor an embedding has been generated
+  if (!existingAuthorId && !newAuthorId && (!embeddingContent || embeddingContent === "")) {
+    showCustomAlert("Please select or enter an Author ID and generate an embedding before analyzing.");
+    return;
+  }
 
-        // The rest of your function where you proceed with the analysis
-        // Display loading indicators
-        document.getElementById("modelConfidenceIndicator").style.display =
-          "none";
-        document.getElementById("modelConfidenceScale").style.display = "none";
-        document.getElementById("cube-loader").style.display = "block";
+  // Check if an author ID has been selected
+  if (!existingAuthorId && !newAuthorId) {
+    showCustomAlert("Please select or enter an Author ID.");
+    return;
+  }
 
-        const authorId = existingAuthorId || newAuthorId;
+  // Check if an embedding has been generated
+  if (!embeddingContent || embeddingContent === "") {
+    showCustomAlert("Please generate an embedding before analyzing.");
+    return;
+  }
 
-        // Update the author ID in the results section
-        document.getElementById("author_identifier").textContent =
-          authorId || "Not Specified";
-        document.getElementById("author_identifier").style.display = "inline";
+  // Display loading indicators
+  document.getElementById("modelConfidenceIndicator").style.display = "none";
+  document.getElementById("modelConfidenceScale").style.display = "block";
+  document.getElementById("cube-loader").style.display = "none";
 
-        // Fetch the next test ID
-        fetch("/next_test_id")
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Received next test ID:", data.next_test_id); // Debugging line
-            document.getElementById("test_id").textContent =
-              data.next_test_id || "Unavailable";
-            document.getElementById("test_id").style.display = "inline";
+  const authorId = existingAuthorId || newAuthorId;
 
-            // After fetching the next test ID, proceed with the authorship prediction
-            const embedding = document.getElementById("result-p").textContent;
-            return fetch("/predict_authorship", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ authorId, embedding }),
-            });
-          })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Server responded with an error: " + response.statusText
-              );
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data); // Inspect data structure
-            document.getElementById("results_analysis").style.display =
-              "inline";
-            document.getElementById("results_analysis").textContent =
-              data.result;
-            document.getElementById("cube-loader").style.display = "none"; // Hide loader
-            updateModelConfidence(data.result);
-          })
-          .catch((error) => {
-            console.error("Caught the following error:", error);
-            document.getElementById("results_analysis").textContent =
-              "Error caught while trying to predict authorship.";
-            document.getElementById("cube-loader").style.display = "none"; // Hide loader
-          });
+  // Update the author ID in the results section
+  document.getElementById("author_identifier").textContent = authorId || "Not Specified";
+  document.getElementById("author_identifier").style.display = "inline";
+
+  // Fetch the next test ID
+  fetch("/next_test_id")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Received next test ID:", data.next_test_id);
+      document.getElementById("test_id").textContent = data.next_test_id || "Unavailable";
+      document.getElementById("test_id").style.display = "inline";
+
+      // After fetching the next test ID, proceed with the authorship prediction
+      const embedding = document.getElementById("result-p").textContent;
+      return fetch("/predict_authorship", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ authorId, embedding }),
+      });
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Server responded with an error: " + response.statusText);
       }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data); // Inspect data structure
+      document.getElementById("results_analysis_distance").style.display = "inline";
+      document.getElementById("results_analysis_same_author").style.display = "inline";
+      document.getElementById("results_analysis_distance").style.display = "inline";
+
+      document.getElementById("results_analysis_distance").textContent = data.confidence.toFixed(4);
+      document.getElementById("results_analysis_same_author").textContent = data.is_same_author;
+      document.getElementById("results_analysis_distance").textContent = data.distance.toFixed(4);
+
+      document.getElementById("cube-loader").style.display = "none"; // Hide loader
+      updateModelConfidence(data.distance);
+    })
+    .catch((error) => {
+      console.error("Caught the following error:", error);
+      document.getElementById("results_analysis_distance").textContent = "Error";
+      document.getElementById("results_analysis_same_author").textContent = "Error";
+      document.getElementById("results_analysis_distance").textContent = "Error";
+      document.getElementById("cube-loader").style.display = "none"; // Hide loader
+    });
+}
+
 
       function updateEmbeddingCount() {
         const authorId =
@@ -797,6 +814,8 @@ document.getElementById("newAuthorId2").style.color = "#959595";
         }
         fetchAndDisplayResults(authorId);
         fetchAndDisplayEmbeddings(authorId);
+        fetchPlotData();
+
 
         fetch(`/count_embeddings/${authorId}`)
           .then((response) => response.json())

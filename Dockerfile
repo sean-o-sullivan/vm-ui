@@ -20,7 +20,7 @@ COPY --chown=user . /app
 USER user
 
 # Make port 8080 available to the world outside this container
-EXPOSE 8080
+EXPOSE 7860
 
 # Run app.py when the container launches
 CMD ["python", "app.py"]
