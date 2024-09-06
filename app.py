@@ -659,4 +659,4 @@ def update_plot():
 
 if __name__ == '__main__':
     app.run(debug=True)
-#does not work well with books with dialogue. better for essays
+#does not work well with books with dialogue. better for essays, for future iterations: must have filtering mechanism or text suitability evaluation
