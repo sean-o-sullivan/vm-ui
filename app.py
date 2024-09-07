@@ -5,6 +5,7 @@ import pandas as pd
 from flask import Flask, jsonify, request, render_template, url_for, abort, current_app, session
 from werkzeug.utils import secure_filename
 from datetime import datetime  
+from datetime import datetime  
 import json
 import plotly
 import plotly.graph_objects as go
@@ -13,7 +14,8 @@ import umap.umap_ as umap
 
 
 
-#from embedding import Embedding  
+#from embedding import Embedding 
+
 from generation.embedding import generateEmbedding
 from eval.evalZ import *
 
@@ -21,7 +23,7 @@ app = Flask(__name__)
 
 # ------------------- activate verifymeenv to run -------------------------------------- #
 
-app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')  # Use a directory named 'uploads' in the current working directory
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')  
 # Ensure the upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 

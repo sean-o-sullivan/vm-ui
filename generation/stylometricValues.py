@@ -1,22 +1,22 @@
-# Import necessary libraries
-import stanza  # Stanford NLP library for tokenization and NLP tasks
-import re  # Regular expressions for text processing
-import math  # Mathematical functions, e.g., for Honoré's Statistic calculation
+
+import stanza  
+import re  
+import math  
 import logging
-import numpy as np  # Importing numpy for variance calculation
+import numpy as np  
 import textstat
 from readability import getmeasures
 from collections import Counter, defaultdict
-# Download and set up the Stanza pipeline (you can specify the language if needed)
-stanza.download('en')  # Download the English model
-# Initialize the Stanza pipeline with required processors
+
+stanza.download('en')  
+
 nlp = stanza.Pipeline('en', processors='tokenize,mwt,pos,lemma,depparse,ner')
 from wordfreq import word_frequency
-from scipy.optimize import curve_fit  # For fitting the Zipfian model
+from scipy.optimize import curve_fit  
 from wordtangible import word_concreteness, avg_text_concreteness, concrete_abstract_ratio
 import nltk
 nltk.download('punkt_tab')
-# Download CMU Pronouncing Dictionary if not already downloaded
+
 import pronouncing
 
 def process_text(text):
